@@ -402,7 +402,7 @@ function applyAll() {
   let r = [..._C];
   const q = document.getElementById('sInp').value.trim().toLowerCase();
   if(q) r = r.filter(c=>c.name.includes(q));
-  if(_F.f!=='all') r = r.filter(c=>String(c[_F.f])===_F.v);
+  if(_F.f!=='all') r = r.filter(c=>String(_F.f==='role'?(_G[c.iconKey]?.[_F.f]||''):c[_F.f])===_F.v);
   renderCards(r);
   updStats(r.length);
 }
