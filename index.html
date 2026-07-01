@@ -119,6 +119,7 @@
     <button class="nav-tab active" data-tab="chars">📖 角色图鉴</button>
     <button class="nav-tab" data-tab="calc">🧮 养成计算器</button>
     <button class="nav-tab" data-tab="glossary">📚 术语百科</button>
+    <button class="nav-tab" data-tab="box">🎒 我的BOX</button>
     <button class="nav-tab" data-tab="abyss">⚔️ 深渊实战</button>
     <button class="nav-tab" data-tab="element">🔥 元素反应</button>
   </div>
@@ -304,6 +305,40 @@
     </div>
   </div>
 
+  <!-- 我的BOX -->
+  <div class="page-section calc-section" id="pageBox">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem">
+      <h3>🎒 我的BOX</h3>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+        <button class="calc-btn" id="boxShareBtn" style="font-size:.8rem;padding:.25rem .7rem">📋 分享BOX码</button>
+        <button class="calc-btn" id="boxImportBtn" style="font-size:.8rem;padding:.25rem .7rem">📥 导入BOX码</button>
+        <button class="calc-btn" id="boxClearBtn" style="font-size:.8rem;padding:.25rem .7rem;background:#e05252;color:white">🗑️ 清空</button>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:#6b5a48;margin-bottom:.8rem">
+      勾选你拥有的角色，数据自动保存在浏览器。系统会基于你的BOX推荐配队和养成方案。
+      <span id="boxCount" style="font-weight:700;color:#4a3929"></span>
+    </p>
+    <div id="boxShareArea" style="display:none;margin-bottom:.7rem;background:#f9f5ef;border-radius:12px;padding:.6rem .8rem">
+      <label style="font-size:.82rem;font-weight:700">分享码（复制发给朋友）：</label>
+      <div style="display:flex;gap:.4rem;margin-top:.3rem">
+        <input id="boxShareInput" readonly style="flex:1;padding:.4rem;border:1px solid #ddd;border-radius:10px;font-size:.8rem;background:white">
+        <button class="calc-btn" id="boxCopyBtn" style="font-size:.8rem;padding:.25rem .7rem">复制</button>
+      </div>
+    </div>
+    <div id="boxImportArea" style="display:none;margin-bottom:.7rem;background:#f9f5ef;border-radius:12px;padding:.6rem .8rem">
+      <label style="font-size:.82rem;font-weight:700">粘贴朋友分享的BOX码：</label>
+      <div style="display:flex;gap:.4rem;margin-top:.3rem">
+        <input id="boxImportInput" placeholder="粘贴BOX码..." style="flex:1;padding:.4rem;border:1px solid #ddd;border-radius:10px;font-size:.8rem;background:white">
+        <button class="calc-btn" id="boxDoImportBtn" style="font-size:.8rem;padding:.25rem .7rem">导入</button>
+      </div>
+    </div>
+    <div id="boxGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:.5rem;margin-bottom:1rem"></div>
+    <div id="boxRecommend" style="display:none">
+      <h4 style="font-size:.95rem;border-bottom:2px solid #f3ede5;padding-bottom:.2rem;margin-bottom:.5rem">🤖 智能推荐</h4>
+      <div id="boxRecContent"></div>
+    </div>
+  </div>
   <!-- 术语百科 -->
   <div class="page-section calc-section" id="pageGlossary">
     <h3 style="margin-bottom:.5rem">📚 原神术语百科</h3>
@@ -539,6 +574,155 @@ function buildGlossary() {
   ).join('');
 }
 
+// ===== BOX系统 =====
+const _BOX_KEY = 'genshin_box';
+
+function getBox() {
+  try{return JSON.parse(localStorage.getItem(_BOX_KEY)||'[]')}catch(e){return []}
+}
+
+function saveBox(keys) {
+  localStorage.setItem(_BOX_KEY, JSON.stringify(keys));
+}
+
+// 渲染BOX角色网格
+function renderBox() {
+  const box = getBox();
+  const g = document.getElementById('boxGrid');
+  
+  g.innerHTML = _C.map(c=>{
+    const checked = box.includes(c.iconKey)?'checked':'';
+    const gd=_G[c.iconKey];
+    const role=gd?gd.role:'';
+    return `<label style="background:${checked?'#fff7ed':'white'};border:1px solid ${checked?'#d4a373':'#eee'};border-radius:10px;padding:.35rem .35rem .35rem .5rem;display:flex;align-items:center;gap:.3rem;cursor:pointer;transition:.15s;font-size:.75rem">
+      <input type="checkbox" data-key="${c.iconKey}" ${checked} style="accent-color:#d4a373">
+      <img src="https://enka.network/ui/UI_AvatarIcon_${c.iconKey}.png" style="width:28px;height:28px;border-radius:6px;background:#f3ede5" alt="" onerror="this.style.display='none'">
+      <div>
+        <div>${c.name}</div>
+        ${role?`<div style="font-size:.6rem;color:#9b7b5c">${role}</div>`:''}
+      </div>
+    </label>`;
+  }).join('');
+
+  // 勾选事件监听
+  g.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      const box = getBox();
+      const key = cb.dataset.key;
+      if(cb.checked){
+        if(!box.includes(key)) box.push(key);
+      } else {
+        const idx = box.indexOf(key);
+        if(idx>=0) box.splice(idx,1);
+      }
+      saveBox(box);
+      renderBox();
+    });
+  });
+
+  // 更新计数
+  document.getElementById('boxCount').textContent = `已选 ${box.length} / ${_C.length} 个角色`;
+
+  // 智能推荐
+  if(box.length>=2){
+    const rec = document.getElementById('boxRecommend');
+    rec.style.display='block';
+    document.getElementById('boxRecContent').innerHTML = generateRecommendations(box);
+  } else {
+    document.getElementById('boxRecommend').style.display='none';
+  }
+}
+
+// 生成推荐
+function generateRecommendations(box) {
+  const names = box.map(k=>_C.find(c=>c.iconKey===k)).filter(Boolean);
+  const has = n=>box.includes(_C.find(c=>c.name===n)?.iconKey);
+
+  // 检测热门队伍
+  const teams = [
+    {name:"雷神国家队",members:["雷电将军","行秋","班尼特","香菱"],desc:"平民战神，全队速切循环"},
+    {name:"胡行钟夜",members:["胡桃","行秋","钟离","夜兰"],desc:"顶级蒸发队"},
+    {name:"万达国际",members:["达达利亚","枫原万叶","班尼特","香菱"],desc:"顶级反应队"},
+    {name:"神鹤万心",members:["神里绫华","枫原万叶","申鹤","珊瑚宫心海"],desc:"顶级永冻队"},
+    {name:"雷九万班",members:["雷电将军","九条裟罗","枫原万叶","班尼特"],desc:"顶级雷伤核爆"},
+    {name:"那芙万白",members:["那维莱特","芙宁娜","枫原万叶","白术"],desc:"顶级强攻队"},
+    {name:"海草行久",members:["艾尔海森","纳西妲","行秋","久岐忍"],desc:"顶级激绽队"},
+    {name:"仆人纯火",members:["阿蕾奇诺","班尼特","枫原万叶","钟离"],desc:"直伤队"},
+    {name:"妮露绽放",members:["妮露","纳西妲","珊瑚宫心海","草主"],desc:"极致绽放"},
+    {name:"提八纳钟",members:["提纳里","八重神子","纳西妲","钟离"],desc:"顶级激化"},
+  ];
+
+  let html = '<div class="sec" style="margin-bottom:0">';
+  let foundAny = false;
+
+  // 检查满编队伍
+  html += '<p style="font-size:.85rem;font-weight:700;margin-bottom:.4rem">✅ 你可组的主力队伍：</p>';
+  teams.forEach(t=>{
+    const own = t.members.filter(m=>has(m));
+    const miss = t.members.filter(m=>!has(m));
+    if(own.length>=3){
+      foundAny = true;
+      const pct = Math.round(own.length/t.members.length*100);
+      html += `<div class="team-card" style="padding:.4rem .7rem;margin-bottom:.35rem">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="tm-name" style="font-size:.82rem">${t.name}</span>
+          <span style="font-size:.7rem;background:${pct>=100?'#52e05233':'#f3c74d33'};padding:.1rem .4rem;border-radius:8px;font-weight:700">${pct}%</span>
+        </div>
+        <div class="tm-members" style="font-size:.76rem">${t.members.map(m=>has(m)?'<span style="color:#27ae60">'+m+'</span>':'<span style="color:#aaa;text-decoration:line-through">'+m+'</span>').join(' · ')}</div>
+        <div class="tm-desc" style="font-size:.72rem">${t.desc}</div>
+        ${miss.length>0?`<div style="font-size:.7rem;color:#8b7355;margin-top:.15rem">💡 缺 ${miss.join('、')}，可用替代方案参考角色详情</div>`:''}
+      </div>`;
+    }
+  });
+
+  if(!foundAny){
+    html += '<p style="font-size:.8rem;color:#8b7355">当前BOX暂未构成主流队伍。增加角色勾选可获得配队推荐。</p>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+// 分享BOX
+function shareBox() {
+  const box = getBox();
+  if(box.length===0){alert('请先勾选角色');return}
+  const code = btoa(JSON.stringify(box)).replace(/=+$/,'');
+  document.getElementById('boxShareInput').value = code;
+  document.getElementById('boxShareArea').style.display='block';
+  document.getElementById('boxImportArea').style.display='none';
+}
+
+// 导入BOX
+function importBox() {
+  document.getElementById('boxImportArea').style.display='block';
+  document.getElementById('boxShareArea').style.display='none';
+}
+
+function doImportBox() {
+  const raw = document.getElementById('boxImportInput').value.trim();
+  if(!raw){alert('请粘贴BOX码');return}
+  try{
+    const json = atob(raw);
+    const keys = JSON.parse(json);
+    if(!Array.isArray(keys)) throw new Error();
+    // 验证所有key是否有效
+    const valid = keys.filter(k=>_C.some(c=>c.iconKey===k));
+    saveBox(valid);
+    document.getElementById('boxImportArea').style.display='none';
+    document.getElementById('boxImportInput').value='';
+    renderBox();
+  }catch(e){
+    alert('BOX码无效，请检查是否正确复制');
+  }
+}
+
+function clearBox() {
+  if(!confirm('确定清空所有角色勾选？'))return;
+  saveBox([]);
+  renderBox();
+}
+
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded',()=>{
   updStats();
@@ -569,6 +753,11 @@ document.addEventListener('DOMContentLoaded',()=>{
       else if(id==='element'){
         document.getElementById('pageElement').style.display='block';
         document.getElementById('pageChars').style.display='none';
+      }
+      else if(id==='box'){
+        document.getElementById('pageBox').style.display='block';
+        document.getElementById('pageChars').style.display='none';
+        renderBox();
       }
       // 显示hideen
       if(id==='chars'){
@@ -618,10 +807,24 @@ document.addEventListener('DOMContentLoaded',()=>{
   // 计算器
   document.getElementById('calcBtn').addEventListener('click',calcMaterials);
 
+  // BOX
+  document.getElementById('boxShareBtn').addEventListener('click',shareBox);
+  document.getElementById('boxImportBtn').addEventListener('click',importBox);
+  document.getElementById('boxClearBtn').addEventListener('click',clearBox);
+  document.getElementById('boxCopyBtn').addEventListener('click',()=>{
+    const inp=document.getElementById('boxShareInput');
+    inp.select();navigator.clipboard.writeText(inp.value).catch(()=>{});
+    alert('已复制到剪贴板');
+  });
+  document.getElementById('boxDoImportBtn').addEventListener('click',doImportBox);
+
   // 设置默认角色
   document.getElementById('pageChars').style.display='block';
   document.getElementById('pageCalc').style.display='none';
   document.getElementById('pageGlossary').style.display='none';
+  document.getElementById('pageAbyss').style.display='none';
+  document.getElementById('pageElement').style.display='none';
+  document.getElementById('pageBox').style.display='none';
 });
 </script>
 </body>
