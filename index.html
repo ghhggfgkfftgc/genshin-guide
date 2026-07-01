@@ -2,397 +2,491 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>原神全角色图鉴</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>原神攻略站 · 随行智能向导</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      background: #f5f2eb;
-      color: #3b2e24;
-      min-height: 100vh;
-    }
-    header {
-      background: linear-gradient(135deg, #4a3929, #6b5a48);
-      color: #f7f0e1;
-      padding: 1rem 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-    }
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .logo span { background: #d4a373; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; color: #2e241a; }
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .search-bar {
-      display: flex;
-      background: #fff7ed;
-      border-radius: 30px;
-      padding: 0.2rem 0.2rem 0.2rem 1rem;
-    }
-    .search-bar input {
-      border: none; background: transparent; outline: none;
-      font-size: 0.9rem; width: 140px; color: #3b2e24;
-    }
-    .search-bar button {
-      background: #d4a373; border: none; border-radius: 30px;
-      padding: 0.4rem 1rem; color: #2e241a; font-weight: bold; cursor: pointer;
-    }
-    .filter-group {
-      display: flex;
-      gap: 0.3rem;
-      flex-wrap: wrap;
-    }
-    .filter-btn {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.25);
-      color: #f7f0e1;
-      padding: 0.3rem 0.7rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .filter-btn:hover { background: rgba(255,255,255,0.25); }
-    .filter-btn.active { background: #d4a373; color: #2e241a; border-color: #d4a373; }
-
-    .container {
-      max-width: 1200px;
-      margin: 1.5rem auto;
-      padding: 0 1.5rem;
-    }
-    .stats-bar {
-      font-size: 0.9rem;
-      color: #9b7b5c;
-      margin-bottom: 1rem;
-      padding: 0.5rem 0;
-    }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: 1rem;
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.07);
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.13);
-    }
-    .card-img {
-      height: 170px;
-      background-size: cover;
-      background-position: center 10%;
-      background-color: #e8d9c8;
-      position: relative;
-    }
-    .card-stars {
-      position: absolute;
-      bottom: 6px;
-      left: 8px;
-      font-size: 0.7rem;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-    }
-    .card-element {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(0,0,0,0.5);
-      color: white;
-      border-radius: 20px;
-      padding: 0.15rem 0.6rem;
-      font-size: 0.75rem;
-      backdrop-filter: blur(4px);
-    }
-    .card-content {
-      padding: 0.7rem 0.8rem 0.8rem;
-    }
-    .card h3 {
-      font-size: 1rem;
-      color: #2e241a;
-    }
-    .card .role {
-      font-size: 0.75rem;
-      color: #9b7b5c;
-      font-weight: 500;
-    }
-
-    .empty-state {
-      grid-column: 1/-1;
-      text-align: center;
-      padding: 3rem;
-      color: #8b7355;
-    }
-
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#f5f2eb;color:#3b2e24;min-height:100vh}
+    /* 术语悬浮提示 */
+    .term{color:#b88657;border-bottom:1px dashed #d4a373;cursor:help;position:relative;display:inline-block}
+    .term:hover .term-popup{visibility:visible;opacity:1;transform:translateY(0)}
+    .term-popup{visibility:hidden;opacity:0;position:absolute;bottom:130%;left:50%;transform:translateX(-50%) translateY(5px);background:#4a3929;color:#f7f0e1;padding:0.5rem 0.8rem;border-radius:10px;font-size:0.8rem;white-space:nowrap;z-index:200;transition:.15s;pointer-events:none}
+    .term-popup::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#4a3929}
+    /* 版本标签 */
+    .v-tag{display:inline-block;background:#d4a37322;color:#8b6f4c;font-size:0.7rem;padding:0.1rem 0.4rem;border-radius:6px;margin-left:0.3rem;font-weight:600}
+    .v-tag.old{background:#e0525222;color:#c0392b}
+    .v-tag.new{background:#52e05222;color:#27ae60}
+    /* header */
+    header{background:linear-gradient(135deg,#4a3929,#6b5a48);color:#f7f0e1;padding:0.7rem 1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.2);position:sticky;top:0;z-index:10}
+    .hdr{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.4rem}
+    .logo{font-size:1.3rem;font-weight:bold;display:flex;align-items:center;gap:.4rem}
+    .logo span{background:#d4a373;padding:.15rem .5rem;border-radius:20px;font-size:.7rem;color:#2e241a}
+    .top-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem}
+    .srch{display:flex;background:#fff7ed;border-radius:30px;padding:.15rem .15rem .15rem .8rem}
+    .srch input{border:none;background:transparent;outline:none;font-size:.85rem;width:120px;color:#3b2e24}
+    .srch button{background:#d4a373;border:none;border-radius:30px;padding:.35rem .8rem;color:#2e241a;font-weight:bold;cursor:pointer;font-size:.8rem}
+    .nav-tabs{display:flex;gap:0;max-width:1200px;margin:.5rem auto 0;padding:0 1.5rem}
+    .nav-tab{background:rgba(255,255,255,.08);border:none;color:#f7f0e1aa;padding:.4rem 1rem;border-radius:10px 10px 0 0;cursor:pointer;font-size:.85rem;transition:.2s}
+    .nav-tab:hover{background:rgba(255,255,255,.15);color:#f7f0e1}
+    .nav-tab.active{background:#f5f2eb;color:#3b2e24}
+    /* filters */
+    .filter-bar{max-width:1200px;margin:.5rem auto 0;padding:0 1.5rem}
+    .filter-group{display:flex;flex-wrap:wrap;gap:.25rem;margin-bottom:.3rem}
+    .f-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#f7f0e1;padding:.2rem .6rem;border-radius:16px;font-size:.75rem;cursor:pointer;transition:.15s}
+    .f-btn:hover{background:rgba(255,255,255,.2)}
+    .f-btn.active{background:#d4a373;color:#2e241a;border-color:#d4a373}
+    .f-btn.role{font-size:.7rem;padding:.15rem .5rem}
+    /* 主内容 */
+    .container{max-width:1200px;margin:1rem auto;padding:0 1.5rem}
+    .stats{font-size:.85rem;color:#9b7b5c;margin-bottom:.7rem}
+    .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.8rem}
+    .card{background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);cursor:pointer;transition:.2s;position:relative}
+    .card:hover{transform:translateY(-4px);box-shadow:0 8px 18px rgba(0,0,0,.12)}
+    .card-img{height:160px;background-size:cover;background-position:center 10%;background-color:#e8d9c8;position:relative}
+    .card-badge{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.5);color:white;border-radius:16px;padding:.1rem .5rem;font-size:.7rem;backdrop-filter:blur(4px)}
+    .card-role-badge{position:absolute;bottom:6px;left:6px;background:#4a3929d0;color:#f7f0e1;font-size:.65rem;padding:.1rem .5rem;border-radius:8px}
+    .card-stars{position:absolute;bottom:4px;right:6px;font-size:.6rem;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+    .card-c{display:flex;align-items:center;justify-content:space-between;padding:.5rem .7rem .6rem}
+    .card-c h3{font-size:.9rem;color:#2e241a}
+    .card-c .wp{font-size:.7rem;color:#9b7b5c}
+    .empty-state{grid-column:1/-1;text-align:center;padding:3rem;color:#8b7355}
     /* 弹窗 */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(5px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      visibility: hidden; opacity: 0;
-      transition: 0.2s;
-    }
-    .modal-overlay.active { visibility: visible; opacity: 1; }
-    .modal {
-      background: white;
-      max-width: 480px;
-      width: 90%;
-      border-radius: 24px;
-      padding: 2rem;
-      position: relative;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-    .modal-close {
-      position: absolute; top: 0.8rem; right: 1.2rem;
-      background: none; border: none; font-size: 2rem;
-      cursor: pointer; color: #8b7355;
-    }
-    .modal h2 { font-size: 1.8rem; margin-bottom: 0.3rem; }
-    .modal .modal-sub { color: #b88657; font-weight: 600; margin-bottom: 1.2rem; font-size: 0.9rem; }
-    .modal-section { margin-bottom: 1rem; }
-    .modal-section h4 {
-      font-size: 1rem;
-      border-bottom: 2px solid #f3ede5;
-      padding-bottom: 0.3rem;
-      margin-bottom: 0.5rem;
-    }
-    .modal-info-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .modal-info-item {
-      background: #f3ede5;
-      padding: 0.4rem 0.8rem;
-      border-radius: 12px;
-      font-size: 0.85rem;
-    }
-    .modal-info-item strong { color: #4a3929; }
-
-    footer {
-      text-align: center;
-      padding: 1.5rem;
-      color: #7b6e5e;
-      background: #e3d9cc;
-      margin-top: 2rem;
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 600px) {
-      .header-content { flex-direction: column; align-items: stretch; }
-      .card-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:100;visibility:hidden;opacity:0;transition:.2s}
+    .modal-overlay.active{visibility:visible;opacity:1}
+    .modal{background:white;max-width:560px;width:92%;border-radius:24px;padding:1.5rem 1.8rem;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.3);max-height:88vh;overflow-y:auto}
+    .modal-close{position:absolute;top:.5rem;right:1rem;background:none;border:none;font-size:2rem;cursor:pointer;color:#8b7355;line-height:1}
+    .modal h2{font-size:1.6rem;margin-bottom:.1rem}
+    .modal .m-sub{color:#b88657;font-size:.85rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+    .sec{margin-bottom:1.2rem}
+    .sec h4{font-size:.95rem;border-bottom:2px solid #f3ede5;padding-bottom:.2rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+    .wp-list{display:flex;flex-direction:column;gap:.35rem}
+    .wp-item{display:flex;align-items:center;gap:.5rem;padding:.3rem .6rem;background:#f9f5ef;border-radius:10px;font-size:.82rem}
+    .wp-tier{font-size:.6rem;padding:.1rem .4rem;border-radius:8px;font-weight:700;white-space:nowrap}
+    .wp-tier.s{background:#f3c74d;color:#3b2e24}
+    .wp-tier.a{background:#a885c4;color:white}
+    .wp-tier.b{background:#9b7b5c;color:white}
+    .wp-tier.c{background:#bdc3c7;color:#555}
+    .info-grid{display:flex;flex-wrap:wrap;gap:.4rem}
+    .info-item{background:#f3ede5;padding:.35rem .7rem;border-radius:10px;font-size:.82rem}
+    .info-item strong{color:#4a3929}
+    .team-card{background:#f9f5ef;border-radius:12px;padding:.6rem .8rem;margin-bottom:.5rem}
+    .team-card .tm-name{font-weight:700;font-size:.88rem;color:#4a3929}
+    .team-card .tm-members{font-size:.8rem;color:#6b5a48;margin:.2rem 0}
+    .team-card .tm-desc{font-size:.78rem;color:#8b7355}
+    .tip-box{background:#fef6e7;border-left:4px solid #d4a373;padding:.6rem .8rem;border-radius:8px;font-size:.82rem;line-height:1.5}
+    /* 材料计算器 */
+    .calc-section{display:none}
+    .calc-section.active{display:block}
+    .material-table{width:100%;border-collapse:collapse;font-size:.82rem;margin:.5rem 0}
+    .material-table td{padding:.3rem .5rem;border-bottom:1px solid #f0e8dd}
+    .material-table td:last-child{text-align:right;font-weight:700;color:#4a3929}
+    .calc-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.5rem 0}
+    .calc-row select,.calc-row input{padding:.4rem .6rem;border:1px solid #ddd;border-radius:10px;font-size:.85rem;background:white}
+    .calc-row button{padding:.4rem 1rem;border:none;border-radius:20px;cursor:pointer;font-weight:700}
+    .calc-btn{background:#d4a373;color:#2e241a}
+    .calc-btn:hover{background:#b88657}
+    .calc-result{background:#f9f5ef;border-radius:14px;padding:.8rem 1rem;margin-top:.5rem;display:none}
+    .calc-result.show{display:block}
+    .calc-result h5{font-size:.9rem;margin-bottom:.4rem;color:#4a3929}
+    /* glossary */
+    .glossary{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem}
+    .gloss-item{background:#f9f5ef;border-radius:10px;padding:.5rem .7rem}
+    .gloss-term{font-weight:700;font-size:.85rem;color:#4a3929}
+    .gloss-def{font-size:.78rem;color:#6b5a48;margin-top:.15rem}
+    /* footer */
+    footer{text-align:center;padding:1.2rem;color:#7b6e5e;background:#e3d9cc;margin-top:2rem;font-size:.8rem}
+    /* 响应式 */
+    @media(max-width:600px){
+      .card-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem}
+      .card-img{height:130px}
+      .modal{padding:1.2rem;width:95%}
+      .srch input{width:80px}
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-content">
-      <div class="logo">🗡️ 原神角色图鉴 <span>全角色</span></div>
-      <div class="controls">
-        <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="搜索角色名..." autocomplete="off">
-          <button id="searchBtn">搜索</button>
-        </div>
+<header>
+  <div class="hdr">
+    <div class="logo">🗡️ 原神攻略站 <span>v5.0 智能向导</span></div>
+    <div class="top-controls">
+      <div class="srch">
+        <input type="text" id="sInp" placeholder="搜角色..." autocomplete="off">
+        <button id="sBtn">搜索</button>
       </div>
     </div>
-    <div class="filter-group" style="margin-top:0.5rem;max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1.5rem;">
-      <button class="filter-btn active" data-filter="all">全部</button>
-      <button class="filter-btn" data-filter="element" data-value="火">🔥 火</button>
-      <button class="filter-btn" data-filter="element" data-value="水">💧 水</button>
-      <button class="filter-btn" data-filter="element" data-value="草">🌿 草</button>
-      <button class="filter-btn" data-filter="element" data-value="雷">⚡ 雷</button>
-      <button class="filter-btn" data-filter="element" data-value="风">🍃 风</button>
-      <button class="filter-btn" data-filter="element" data-value="冰">❄️ 冰</button>
-      <button class="filter-btn" data-filter="element" data-value="岩">⛰️ 岩</button>
-      <button class="filter-btn" data-filter="stars" data-value="5">⭐⭐⭐⭐⭐</button>
-      <button class="filter-btn" data-filter="stars" data-value="4">⭐⭐⭐⭐</button>
-      <button class="filter-btn" data-filter="weapon" data-value="单手剑">🗡️ 单手剑</button>
-      <button class="filter-btn" data-filter="weapon" data-value="双手剑">⚔️ 双手剑</button>
-      <button class="filter-btn" data-filter="weapon" data-value="长柄武器">🔱 长柄</button>
-      <button class="filter-btn" data-filter="weapon" data-value="法器">🔮 法器</button>
-      <button class="filter-btn" data-filter="weapon" data-value="弓">🏹 弓</button>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-tab="chars">📖 角色图鉴</button>
+    <button class="nav-tab" data-tab="calc">🧮 养成计算器</button>
+    <button class="nav-tab" data-tab="glossary">📚 术语百科</button>
+  </div>
+  <div class="filter-bar" id="filterBar">
+    <div class="filter-group" id="mainFilters">
+      <button class="f-btn active all">全部</button>
+      <button class="f-btn" data-f="element" data-v="火">🔥火</button>
+      <button class="f-btn" data-f="element" data-v="水">💧水</button>
+      <button class="f-btn" data-f="element" data-v="草">🌿草</button>
+      <button class="f-btn" data-f="element" data-v="雷">⚡雷</button>
+      <button class="f-btn" data-f="element" data-v="风">🍃风</button>
+      <button class="f-btn" data-f="element" data-v="冰">❄️冰</button>
+      <button class="f-btn" data-f="element" data-v="岩">⛰️岩</button>
+      <button class="f-btn" data-f="stars" data-v="5">⭐5</button>
+      <button class="f-btn" data-f="stars" data-v="4">⭐4</button>
     </div>
-  </header>
+    <div class="filter-group" id="roleFilters">
+      <span style="color:#f7f0e188;font-size:.72rem;margin-right:.2rem">定位:</span>
+      <button class="f-btn role" data-f="role" data-v="主C">主C</button>
+      <button class="f-btn role" data-f="role" data-v="副C">副C</button>
+      <button class="f-btn role" data-f="role" data-v="辅助">辅助</button>
+      <button class="f-btn role" data-f="role" data-v="治疗">治疗</button>
+      <button class="f-btn role" data-f="role" data-v="盾辅">盾辅</button>
+      <button class="f-btn role" data-f="weapon" data-v="单手剑">🗡️单手</button>
+      <button class="f-btn role" data-f="weapon" data-v="双手剑">⚔️大剑</button>
+      <button class="f-btn role" data-f="weapon" data-v="长柄武器">🔱长柄</button>
+      <button class="f-btn role" data-f="weapon" data-v="法器">🔮法器</button>
+      <button class="f-btn role" data-f="weapon" data-v="弓">🏹弓</button>
+    </div>
+  </div>
+</header>
 
-  <div class="container">
-    <div class="stats-bar" id="statsBar"></div>
-    <div class="card-grid" id="cardContainer"></div>
+<div class="container">
+  <!-- 角色图鉴 -->
+  <div class="page-section" id="pageChars">
+    <div class="stats" id="statsBar"></div>
+    <div class="card-grid" id="cardGrid"></div>
   </div>
 
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <button class="modal-close" id="modalClose">&times;</button>
-      <div id="modalBody"></div>
+  <!-- 养成计算器 -->
+  <div class="page-section calc-section" id="pageCalc">
+    <h3 style="margin-bottom:.5rem">🧮 养成计算器</h3>
+    <p style="font-size:.85rem;color:#6b5a48;margin-bottom:1rem">
+      选择目标角色 + 目标等级，自动计算所需全部素材及刷取建议
+    </p>
+    <div class="calc-row">
+      <select id="calcChar"><option value="">— 选择角色 —</option></select>
+      <select id="calcLvl">
+        <option value="">目标等级</option>
+        <option value="20">20级(突破)</option><option value="40">40级(突破)</option>
+        <option value="50">50级(突破)</option><option value="60">60级(突破)</option>
+        <option value="70">70级(突破)</option><option value="80">80级(突破)</option>
+        <option value="90">90级(满级)</option>
+      </select>
+      <button class="calc-btn" id="calcBtn">计算素材</button>
     </div>
+    <div class="calc-result" id="calcResult"></div>
   </div>
 
-  <footer>
-    © 2026 原神角色图鉴 · 非官方粉丝站 · 数据来源于 EnkaNetwork & Dimbreath · 仅供学习参考
-  </footer>
+  <!-- 术语百科 -->
+  <div class="page-section calc-section" id="pageGlossary">
+    <h3 style="margin-bottom:.5rem">📚 原神术语百科</h3>
+    <p style="font-size:.85rem;color:#6b5a48;margin-bottom:1rem">
+      鼠标悬停文中 <span class="term">高亮词<span class="term-popup">试试看</span></span> 可查看解释
+    </p>
+    <div class="glossary" id="glossaryGrid"></div>
+  </div>
+</div>
 
-  <script>
-    // ===== 全角色数据 =====
-    const characters = [{"id": 10000035, "name": "七七", "element": "冰", "weapon": "单手剑", "stars": 5, "iconKey": "Qiqi"}, {"id": 10000114, "name": "丝柯克", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "SkirkNew"}, {"id": 10000051, "name": "优菈", "element": "冰", "weapon": "双手剑", "stars": 5, "iconKey": "Eula"}, {"id": 10000098, "name": "克洛琳德", "element": "雷", "weapon": "单手剑", "stars": 5, "iconKey": "Clorinde"}, {"id": 10000058, "name": "八重神子", "element": "雷", "weapon": "法器", "stars": 5, "iconKey": "Yae"}, {"id": 10000042, "name": "刻晴", "element": "雷", "weapon": "单手剑", "stars": 5, "iconKey": "Keqing"}, {"id": 10000094, "name": "千织", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Chiori"}, {"id": 10000029, "name": "可莉", "element": "火", "weapon": "法器", "stars": 5, "iconKey": "Klee"}, {"id": 10000112, "name": "埃斯科菲耶", "element": "冰", "weapon": "长柄武器", "stars": 5, "iconKey": "Escoffier"}, {"id": 10000062, "name": "埃洛伊", "element": "冰", "weapon": "弓", "stars": 5, "iconKey": "Aloy"}, {"id": 10000101, "name": "基尼奇", "element": "草", "weapon": "双手剑", "stars": 5, "iconKey": "Kinich"}, {"id": 10000060, "name": "夜兰", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Yelan"}, {"id": 10000070, "name": "妮露", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Nilou"}, {"id": 10000091, "name": "娜维娅", "element": "岩", "weapon": "双手剑", "stars": 5, "iconKey": "Navia"}, {"id": 10000049, "name": "宵宫", "element": "火", "weapon": "弓", "stars": 5, "iconKey": "Yoimiya"}, {"id": 10000095, "name": "希格雯", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Sigewinne"}, {"id": 10000103, "name": "希诺宁", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Xilonen"}, {"id": 10000104, "name": "恰斯卡", "element": "风", "weapon": "弓", "stars": 5, "iconKey": "Chasca"}, {"id": 10000069, "name": "提纳里", "element": "草", "weapon": "弓", "stars": 5, "iconKey": "Tighnari"}, {"id": 10000084, "name": "林尼", "element": "火", "weapon": "弓", "stars": 5, "iconKey": "Liney"}, {"id": 10000047, "name": "枫原万叶", "element": "风", "weapon": "单手剑", "stars": 5, "iconKey": "Kazuha"}, {"id": 10000109, "name": "梦见月瑞希", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Mizuki"}, {"id": 10000075, "name": "流浪者", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Wanderer"}, {"id": 10000022, "name": "温迪", "element": "风", "weapon": "弓", "stars": 5, "iconKey": "Venti"}, {"id": 10000102, "name": "玛拉妮", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Mualani"}, {"id": 10000106, "name": "玛薇卡", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Mavuika"}, {"id": 10000054, "name": "珊瑚宫心海", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Kokomi"}, {"id": 10000003, "name": "琴", "element": "风", "weapon": "单手剑", "stars": 5, "iconKey": "Qin"}, {"id": 10000111, "name": "瓦雷莎", "element": "雷", "weapon": "法器", "stars": 5, "iconKey": "Varesa"}, {"id": 10000037, "name": "甘雨", "element": "冰", "weapon": "弓", "stars": 5, "iconKey": "Ganyu"}, {"id": 10000063, "name": "申鹤", "element": "冰", "weapon": "长柄武器", "stars": 5, "iconKey": "Shenhe"}, {"id": 10000082, "name": "白术", "element": "草", "weapon": "法器", "stars": 5, "iconKey": "Baizhuer"}, {"id": 10000066, "name": "神里绫人", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Ayato"}, {"id": 10000002, "name": "神里绫华", "element": "冰", "weapon": "单手剑", "stars": 5, "iconKey": "Ayaka"}, {"id": 10000073, "name": "纳西妲", "element": "草", "weapon": "法器", "stars": 5, "iconKey": "Nahida"}, {"id": 10000046, "name": "胡桃", "element": "火", "weapon": "长柄武器", "stars": 5, "iconKey": "Hutao"}, {"id": 10000078, "name": "艾尔海森", "element": "草", "weapon": "单手剑", "stars": 5, "iconKey": "Alhatham"}, {"id": 10000099, "name": "艾梅莉埃", "element": "草", "weapon": "长柄武器", "stars": 5, "iconKey": "Emilie"}, {"id": 10000089, "name": "芙宁娜", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Furina"}, {"id": 10000107, "name": "茜特菈莉", "element": "冰", "weapon": "法器", "stars": 5, "iconKey": "Citlali"}, {"id": 10000057, "name": "荒泷一斗", "element": "岩", "weapon": "双手剑", "stars": 5, "iconKey": "Itto"}, {"id": 10000041, "name": "莫娜", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Mona"}, {"id": 10000086, "name": "莱欧斯利", "element": "冰", "weapon": "法器", "stars": 5, "iconKey": "Wriothesley"}, {"id": 10000071, "name": "赛诺", "element": "雷", "weapon": "长柄武器", "stars": 5, "iconKey": "Cyno"}, {"id": 10000033, "name": "达达利亚", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Tartaglia"}, {"id": 10000016, "name": "迪卢克", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Diluc"}, {"id": 10000079, "name": "迪希雅", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Dehya"}, {"id": 10000087, "name": "那维莱特", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Neuvillette"}, {"id": 10000030, "name": "钟离", "element": "岩", "weapon": "长柄武器", "stars": 5, "iconKey": "Zhongli"}, {"id": 10000093, "name": "闲云", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Liuyun"}, {"id": 10000096, "name": "阿蕾奇诺", "element": "火", "weapon": "长柄武器", "stars": 5, "iconKey": "Arlecchino"}, {"id": 10000038, "name": "阿贝多", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Albedo"}, {"id": 10000052, "name": "雷电将军", "element": "雷", "weapon": "长柄武器", "stars": 5, "iconKey": "Shougun"}, {"id": 10000026, "name": "魈", "element": "风", "weapon": "长柄武器", "stars": 5, "iconKey": "Xiao"}, {"id": 10000006, "name": "丽莎", "element": "雷", "weapon": "法器", "stars": 4, "iconKey": "Lisa"}, {"id": 10000065, "name": "久岐忍", "element": "雷", "weapon": "单手剑", "stars": 4, "iconKey": "Shinobu"}, {"id": 10000056, "name": "九条裟罗", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Sara"}, {"id": 10000064, "name": "云堇", "element": "岩", "weapon": "长柄武器", "stars": 4, "iconKey": "Yunjin"}, {"id": 10000055, "name": "五郎", "element": "岩", "weapon": "弓", "stars": 4, "iconKey": "Gorou"}, {"id": 10000110, "name": "伊安珊", "element": "雷", "weapon": "长柄武器", "stars": 4, "iconKey": "Iansan"}, {"id": 10000113, "name": "伊法", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Ifa"}, {"id": 10000027, "name": "凝光", "element": "岩", "weapon": "法器", "stars": 4, "iconKey": "Ningguang"}, {"id": 10000015, "name": "凯亚", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Kaeya"}, {"id": 10000024, "name": "北斗", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Beidou"}, {"id": 10000081, "name": "卡维", "element": "草", "weapon": "双手剑", "stars": 4, "iconKey": "Kaveh"}, {"id": 10000100, "name": "卡齐娜", "element": "岩", "weapon": "长柄武器", "stars": 4, "iconKey": "Kachina"}, {"id": 10000092, "name": "嘉明", "element": "火", "weapon": "双手剑", "stars": 4, "iconKey": "Gaming"}, {"id": 10000072, "name": "坎蒂丝", "element": "水", "weapon": "长柄武器", "stars": 4, "iconKey": "Candace"}, {"id": 10000090, "name": "夏沃蕾", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Chevreuse"}, {"id": 10000088, "name": "夏洛蒂", "element": "冰", "weapon": "法器", "stars": 4, "iconKey": "Charlotte"}, {"id": 10000068, "name": "多莉", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Dori"}, {"id": 10000021, "name": "安柏", "element": "火", "weapon": "弓", "stars": 4, "iconKey": "Ambor"}, {"id": 10000050, "name": "托马", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Tohma"}, {"id": 10000053, "name": "早柚", "element": "风", "weapon": "双手剑", "stars": 4, "iconKey": "Sayu"}, {"id": 10000067, "name": "柯莱", "element": "草", "weapon": "弓", "stars": 4, "iconKey": "Collei"}, {"id": 10000105, "name": "欧洛伦", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Olorun"}, {"id": 10000048, "name": "烟绯", "element": "火", "weapon": "法器", "stars": 4, "iconKey": "Feiyan"}, {"id": 10000076, "name": "珐露珊", "element": "风", "weapon": "弓", "stars": 4, "iconKey": "Faruzan"}, {"id": 10000032, "name": "班尼特", "element": "火", "weapon": "单手剑", "stars": 4, "iconKey": "Bennett"}, {"id": 10000083, "name": "琳妮特", "element": "风", "weapon": "单手剑", "stars": 4, "iconKey": "Linette"}, {"id": 10000077, "name": "瑶瑶", "element": "草", "weapon": "长柄武器", "stars": 4, "iconKey": "Yaoyao"}, {"id": 10000043, "name": "砂糖", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Sucrose"}, {"id": 10000080, "name": "米卡", "element": "冰", "weapon": "长柄武器", "stars": 4, "iconKey": "Mika"}, {"id": 10000061, "name": "绮良良", "element": "草", "weapon": "单手剑", "stars": 4, "iconKey": "Momoka"}, {"id": 10000045, "name": "罗莎莉亚", "element": "冰", "weapon": "长柄武器", "stars": 4, "iconKey": "Rosaria"}, {"id": 10000014, "name": "芭芭拉", "element": "水", "weapon": "法器", "stars": 4, "iconKey": "Barbara"}, {"id": 10000074, "name": "莱依拉", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Layla"}, {"id": 10000085, "name": "菲米尼", "element": "冰", "weapon": "双手剑", "stars": 4, "iconKey": "Freminet"}, {"id": 10000031, "name": "菲谢尔", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Fischl"}, {"id": 10000108, "name": "蓝砚", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Lanyan"}, {"id": 10000025, "name": "行秋", "element": "水", "weapon": "单手剑", "stars": 4, "iconKey": "Xingqiu"}, {"id": 10000034, "name": "诺艾尔", "element": "岩", "weapon": "双手剑", "stars": 4, "iconKey": "Noel"}, {"id": 10000097, "name": "赛索斯", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Sethos"}, {"id": 10000044, "name": "辛焱", "element": "火", "weapon": "双手剑", "stars": 4, "iconKey": "Xinyan"}, {"id": 10000115, "name": "达希莉亚", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Dahlia"}, {"id": 10000039, "name": "迪奥娜", "element": "冰", "weapon": "弓", "stars": 4, "iconKey": "Diona"}, {"id": 10000036, "name": "重云", "element": "冰", "weapon": "双手剑", "stars": 4, "iconKey": "Chongyun"}, {"id": 10000020, "name": "雷泽", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Razor"}, {"id": 10000023, "name": "香菱", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Xiangling"}, {"id": 10000059, "name": "鹿野院平藏", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Heizo"}];
+<div class="modal-overlay" id="mo">
+  <div class="modal">
+    <button class="modal-close" id="mClose">&times;</button>
+    <div id="mBody"></div>
+  </div>
+</div>
 
-    const stars = {5: "⭐⭐⭐⭐⭐", 4: "⭐⭐⭐⭐"};
-    const elements_emoji = { "火":"🔥", "水":"💧", "草":"🌿", "雷":"⚡", "风":"🍃", "冰":"❄️", "岩":"⛰️" };
+<footer>
+  © 2026 原神攻略站 · 非官方粉丝站 · 数据仅供参考 · 版本标记确保攻略时效性
+</footer>
 
-    let filterState = { type: 'all', value: '' };
+<script>
+// ===== 角色数据 =====
+const _C = [{"id": 10000035, "name": "七七", "element": "冰", "weapon": "单手剑", "stars": 5, "iconKey": "Qiqi"}, {"id": 10000114, "name": "丝柯克", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "SkirkNew"}, {"id": 10000051, "name": "优菈", "element": "冰", "weapon": "双手剑", "stars": 5, "iconKey": "Eula"}, {"id": 10000098, "name": "克洛琳德", "element": "雷", "weapon": "单手剑", "stars": 5, "iconKey": "Clorinde"}, {"id": 10000058, "name": "八重神子", "element": "雷", "weapon": "法器", "stars": 5, "iconKey": "Yae"}, {"id": 10000042, "name": "刻晴", "element": "雷", "weapon": "单手剑", "stars": 5, "iconKey": "Keqing"}, {"id": 10000094, "name": "千织", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Chiori"}, {"id": 10000029, "name": "可莉", "element": "火", "weapon": "法器", "stars": 5, "iconKey": "Klee"}, {"id": 10000112, "name": "埃斯科菲耶", "element": "冰", "weapon": "长柄武器", "stars": 5, "iconKey": "Escoffier"}, {"id": 10000062, "name": "埃洛伊", "element": "冰", "weapon": "弓", "stars": 5, "iconKey": "Aloy"}, {"id": 10000101, "name": "基尼奇", "element": "草", "weapon": "双手剑", "stars": 5, "iconKey": "Kinich"}, {"id": 10000060, "name": "夜兰", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Yelan"}, {"id": 10000070, "name": "妮露", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Nilou"}, {"id": 10000091, "name": "娜维娅", "element": "岩", "weapon": "双手剑", "stars": 5, "iconKey": "Navia"}, {"id": 10000049, "name": "宵宫", "element": "火", "weapon": "弓", "stars": 5, "iconKey": "Yoimiya"}, {"id": 10000095, "name": "希格雯", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Sigewinne"}, {"id": 10000103, "name": "希诺宁", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Xilonen"}, {"id": 10000104, "name": "恰斯卡", "element": "风", "weapon": "弓", "stars": 5, "iconKey": "Chasca"}, {"id": 10000069, "name": "提纳里", "element": "草", "weapon": "弓", "stars": 5, "iconKey": "Tighnari"}, {"id": 10000084, "name": "林尼", "element": "火", "weapon": "弓", "stars": 5, "iconKey": "Liney"}, {"id": 10000047, "name": "枫原万叶", "element": "风", "weapon": "单手剑", "stars": 5, "iconKey": "Kazuha"}, {"id": 10000109, "name": "梦见月瑞希", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Mizuki"}, {"id": 10000075, "name": "流浪者", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Wanderer"}, {"id": 10000022, "name": "温迪", "element": "风", "weapon": "弓", "stars": 5, "iconKey": "Venti"}, {"id": 10000102, "name": "玛拉妮", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Mualani"}, {"id": 10000106, "name": "玛薇卡", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Mavuika"}, {"id": 10000054, "name": "珊瑚宫心海", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Kokomi"}, {"id": 10000003, "name": "琴", "element": "风", "weapon": "单手剑", "stars": 5, "iconKey": "Qin"}, {"id": 10000111, "name": "瓦雷莎", "element": "雷", "weapon": "法器", "stars": 5, "iconKey": "Varesa"}, {"id": 10000037, "name": "甘雨", "element": "冰", "weapon": "弓", "stars": 5, "iconKey": "Ganyu"}, {"id": 10000063, "name": "申鹤", "element": "冰", "weapon": "长柄武器", "stars": 5, "iconKey": "Shenhe"}, {"id": 10000082, "name": "白术", "element": "草", "weapon": "法器", "stars": 5, "iconKey": "Baizhuer"}, {"id": 10000066, "name": "神里绫人", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Ayato"}, {"id": 10000002, "name": "神里绫华", "element": "冰", "weapon": "单手剑", "stars": 5, "iconKey": "Ayaka"}, {"id": 10000073, "name": "纳西妲", "element": "草", "weapon": "法器", "stars": 5, "iconKey": "Nahida"}, {"id": 10000046, "name": "胡桃", "element": "火", "weapon": "长柄武器", "stars": 5, "iconKey": "Hutao"}, {"id": 10000078, "name": "艾尔海森", "element": "草", "weapon": "单手剑", "stars": 5, "iconKey": "Alhatham"}, {"id": 10000099, "name": "艾梅莉埃", "element": "草", "weapon": "长柄武器", "stars": 5, "iconKey": "Emilie"}, {"id": 10000089, "name": "芙宁娜", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Furina"}, {"id": 10000107, "name": "茜特菈莉", "element": "冰", "weapon": "法器", "stars": 5, "iconKey": "Citlali"}, {"id": 10000057, "name": "荒泷一斗", "element": "岩", "weapon": "双手剑", "stars": 5, "iconKey": "Itto"}, {"id": 10000041, "name": "莫娜", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Mona"}, {"id": 10000086, "name": "莱欧斯利", "element": "冰", "weapon": "法器", "stars": 5, "iconKey": "Wriothesley"}, {"id": 10000071, "name": "赛诺", "element": "雷", "weapon": "长柄武器", "stars": 5, "iconKey": "Cyno"}, {"id": 10000033, "name": "达达利亚", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Tartaglia"}, {"id": 10000016, "name": "迪卢克", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Diluc"}, {"id": 10000079, "name": "迪希雅", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Dehya"}, {"id": 10000087, "name": "那维莱特", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Neuvillette"}, {"id": 10000030, "name": "钟离", "element": "岩", "weapon": "长柄武器", "stars": 5, "iconKey": "Zhongli"}, {"id": 10000093, "name": "闲云", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Liuyun"}, {"id": 10000096, "name": "阿蕾奇诺", "element": "火", "weapon": "长柄武器", "stars": 5, "iconKey": "Arlecchino"}, {"id": 10000038, "name": "阿贝多", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Albedo"}, {"id": 10000052, "name": "雷电将军", "element": "雷", "weapon": "长柄武器", "stars": 5, "iconKey": "Shougun"}, {"id": 10000026, "name": "魈", "element": "风", "weapon": "长柄武器", "stars": 5, "iconKey": "Xiao"}, {"id": 10000006, "name": "丽莎", "element": "雷", "weapon": "法器", "stars": 4, "iconKey": "Lisa"}, {"id": 10000065, "name": "久岐忍", "element": "雷", "weapon": "单手剑", "stars": 4, "iconKey": "Shinobu"}, {"id": 10000056, "name": "九条裟罗", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Sara"}, {"id": 10000064, "name": "云堇", "element": "岩", "weapon": "长柄武器", "stars": 4, "iconKey": "Yunjin"}, {"id": 10000055, "name": "五郎", "element": "岩", "weapon": "弓", "stars": 4, "iconKey": "Gorou"}, {"id": 10000110, "name": "伊安珊", "element": "雷", "weapon": "长柄武器", "stars": 4, "iconKey": "Iansan"}, {"id": 10000113, "name": "伊法", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Ifa"}, {"id": 10000027, "name": "凝光", "element": "岩", "weapon": "法器", "stars": 4, "iconKey": "Ningguang"}, {"id": 10000015, "name": "凯亚", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Kaeya"}, {"id": 10000024, "name": "北斗", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Beidou"}, {"id": 10000081, "name": "卡维", "element": "草", "weapon": "双手剑", "stars": 4, "iconKey": "Kaveh"}, {"id": 10000100, "name": "卡齐娜", "element": "岩", "weapon": "长柄武器", "stars": 4, "iconKey": "Kachina"}, {"id": 10000092, "name": "嘉明", "element": "火", "weapon": "双手剑", "stars": 4, "iconKey": "Gaming"}, {"id": 10000072, "name": "坎蒂丝", "element": "水", "weapon": "长柄武器", "stars": 4, "iconKey": "Candace"}, {"id": 10000090, "name": "夏沃蕾", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Chevreuse"}, {"id": 10000088, "name": "夏洛蒂", "element": "冰", "weapon": "法器", "stars": 4, "iconKey": "Charlotte"}, {"id": 10000068, "name": "多莉", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Dori"}, {"id": 10000021, "name": "安柏", "element": "火", "weapon": "弓", "stars": 4, "iconKey": "Ambor"}, {"id": 10000050, "name": "托马", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Tohma"}, {"id": 10000053, "name": "早柚", "element": "风", "weapon": "双手剑", "stars": 4, "iconKey": "Sayu"}, {"id": 10000067, "name": "柯莱", "element": "草", "weapon": "弓", "stars": 4, "iconKey": "Collei"}, {"id": 10000105, "name": "欧洛伦", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Olorun"}, {"id": 10000048, "name": "烟绯", "element": "火", "weapon": "法器", "stars": 4, "iconKey": "Feiyan"}, {"id": 10000076, "name": "珐露珊", "element": "风", "weapon": "弓", "stars": 4, "iconKey": "Faruzan"}, {"id": 10000032, "name": "班尼特", "element": "火", "weapon": "单手剑", "stars": 4, "iconKey": "Bennett"}, {"id": 10000083, "name": "琳妮特", "element": "风", "weapon": "单手剑", "stars": 4, "iconKey": "Linette"}, {"id": 10000077, "name": "瑶瑶", "element": "草", "weapon": "长柄武器", "stars": 4, "iconKey": "Yaoyao"}, {"id": 10000043, "name": "砂糖", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Sucrose"}, {"id": 10000080, "name": "米卡", "element": "冰", "weapon": "长柄武器", "stars": 4, "iconKey": "Mika"}, {"id": 10000061, "name": "绮良良", "element": "草", "weapon": "单手剑", "stars": 4, "iconKey": "Momoka"}, {"id": 10000045, "name": "罗莎莉亚", "element": "冰", "weapon": "长柄武器", "stars": 4, "iconKey": "Rosaria"}, {"id": 10000014, "name": "芭芭拉", "element": "水", "weapon": "法器", "stars": 4, "iconKey": "Barbara"}, {"id": 10000074, "name": "莱依拉", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Layla"}, {"id": 10000085, "name": "菲米尼", "element": "冰", "weapon": "双手剑", "stars": 4, "iconKey": "Freminet"}, {"id": 10000031, "name": "菲谢尔", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Fischl"}, {"id": 10000108, "name": "蓝砚", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Lanyan"}, {"id": 10000025, "name": "行秋", "element": "水", "weapon": "单手剑", "stars": 4, "iconKey": "Xingqiu"}, {"id": 10000034, "name": "诺艾尔", "element": "岩", "weapon": "双手剑", "stars": 4, "iconKey": "Noel"}, {"id": 10000097, "name": "赛索斯", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Sethos"}, {"id": 10000044, "name": "辛焱", "element": "火", "weapon": "双手剑", "stars": 4, "iconKey": "Xinyan"}, {"id": 10000115, "name": "达希莉亚", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Dahlia"}, {"id": 10000039, "name": "迪奥娜", "element": "冰", "weapon": "弓", "stars": 4, "iconKey": "Diona"}, {"id": 10000036, "name": "重云", "element": "冰", "weapon": "双手剑", "stars": 4, "iconKey": "Chongyun"}, {"id": 10000020, "name": "雷泽", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Razor"}, {"id": 10000023, "name": "香菱", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Xiangling"}, {"id": 10000059, "name": "鹿野院平藏", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Heizo"}];
 
-    // 渲染卡片
-    function renderCards(data) {
-      const container = document.getElementById('cardContainer');
-      if (!data.length) {
-        container.innerHTML = '<div class="empty-state">😔 没有找到符合条件的角色</div>';
-        updateStats(0);
-        return;
-      }
-      container.innerHTML = data.map(c => `
-        <div class="card" data-id="${c.id}">
-          <div class="card-img" style="background-image: url('https://enka.network/ui/UI_Gacha_AvatarImg_${c.iconKey}.png')">
-            <span class="card-element">${elements_emoji[c.element]||''} ${c.element}</span>
-            <span class="card-stars" style="color:${c.stars===5?'#f3c74d':'#a885c4'}">${stars[c.stars]}</span>
-          </div>
-          <div class="card-content">
-            <h3>${c.name}</h3>
-            <div class="role">${c.weapon}</div>
-          </div>
-        </div>
-      `).join('');
-    }
+// ===== 攻略数据 =====
+const _G = {"Hutao": {"role": "主C", "weapons": [{"name": "护摩之杖", "tier": "专武", "desc": "完美适配半血增伤"}, {"name": "匣里灭辰", "tier": "四星", "desc": "精通副词条，蒸发队毕业"}, {"name": "和璞鸢", "tier": "替代", "desc": "暴击副词条，泛用高白值"}], "artifacts": {"set": "4魔女", "mainStats": "生命值/火伤加成/暴击率"}, "talentOrder": "普攻 ≥ E技能 > Q技能", "teams": [{"name": "胡行钟夜", "members": "胡桃+行秋+钟离+夜兰", "desc": "顶级蒸发队，胡桃站场"}, {"name": "胡行钟阿", "members": "胡桃+行秋+钟离+阿贝多", "desc": "平民替代版"}], "materials": {"boss": "常燃火种", "bookType": "勤劳", "weeklyBoss": "公子", "localSpecialty": "霓裳花", "enemyDrop": "骗骗花蜜"}, "tip": "半血以下伤害最大化，E技能附魔期间打重击蒸发。注意控血，50%以下伤害更高但生存压力大。", "version": "5.0"}, "Zhongli": {"role": "盾辅", "weapons": [{"name": "和璞鸢", "tier": "五星", "desc": "副C输出向"}, {"name": "西风长枪", "tier": "四星", "desc": "全队充能，循环最佳"}, {"name": "黑缨枪", "tier": "三星", "desc": "纯盾辅，血量最高"}], "artifacts": {"set": "4千岩", "mainStats": "生命值/生命值/生命值"}, "talentOrder": "E技能 > Q技能 > 普攻", "teams": [{"name": "万金油", "members": "任意主C+钟离", "desc": "减抗+最强盾，几乎任何队都能塞"}, {"name": "胡行钟", "members": "胡桃+行秋+钟离+夜兰", "desc": "经典组合"}], "materials": {"boss": "玄岩之塔", "bookType": "黄金", "weeklyBoss": "若陀龙王", "localSpecialty": "石珀", "enemyDrop": "史莱姆凝液"}, "tip": "全元素减抗20%，护盾厚度=生命值加成。推荐全堆生命，盾量优先。", "version": "5.0"}, "Shougun": {"role": "副C", "weapons": [{"name": "薙草之稻光", "tier": "专武", "desc": "充能转攻击，完美适配"}, {"name": "渔获", "tier": "四星", "desc": "钓鱼兑换，满精免费"}, {"name": "天空之脊", "tier": "替代", "desc": "充能副词条"}], "artifacts": {"set": "4绝缘", "mainStats": "充能效率/攻击力加成/暴击率"}, "talentOrder": "Q技能 > E技能 > 普攻", "teams": [{"name": "雷神国家队", "members": "雷神+行秋+班尼特+香菱", "desc": "平民战神队，全队速切"}, {"name": "雷九万班", "members": "雷神+九条+万叶+班尼特", "desc": "高配核爆队"}], "materials": {"boss": "雷霆数珠", "bookType": "天光", "weeklyBoss": "女士", "localSpecialty": "天云草实", "enemyDrop": "刀镡"}, "tip": "充能效率超过200%后每10%额外增加雷伤。0命国家队，2命以上雷九万班。", "version": "5.0"}, "Nahida": {"role": "辅助", "weapons": [{"name": "千夜浮梦", "tier": "专武", "desc": "精通+全队增伤"}, {"name": "祭礼残章", "tier": "四星", "desc": "精通副词条"}, {"name": "流浪的晚星", "tier": "四星", "desc": "精通转攻击"}], "artifacts": {"set": "4深林(草套)", "mainStats": "元素精通/元素精通/元素精通"}, "talentOrder": "E技能 > Q技能 > 普攻", "teams": [{"name": "妮露绽放队", "members": "纳西妲+妮露+心海+草主", "desc": "极致绽放"}, {"name": "超绽放队", "members": "纳西妲+行秋+久岐忍+万叶", "desc": "对单强力"}, {"name": "激化队", "members": "纳西妲+赛诺/刻晴+万叶+盾", "desc": "激化反应"}], "materials": {"boss": "灭诤草蔓", "bookType": "诤言", "weeklyBoss": "散兵", "localSpecialty": "劫波莲", "enemyDrop": "孢子"}, "tip": "精通目标1000，之后堆充能。E技能可拍照扫描全地图采集物。", "version": "5.0"}, "Kazuha": {"role": "辅助", "weapons": [{"name": "苍古自由之誓", "tier": "专武", "desc": "精通+全队增伤"}, {"name": "铁蜂刺", "tier": "锻造", "desc": "精通副词条，免费"}, {"name": "西福斯的月光", "tier": "四星", "desc": "精通转充能"}], "artifacts": {"set": "4翠绿(风套)", "mainStats": "元素精通/元素精通/元素精通"}, "talentOrder": "Q技能 > E技能 > 普攻", "teams": [{"name": "万达国际", "members": "公子+万叶+班尼特+香菱", "desc": "顶级反应队"}, {"name": "神鹤万心", "members": "神里+万叶+申鹤+心海", "desc": "冰系顶级永冻"}, {"name": "雷九万班", "members": "雷神+九条+万叶+班尼特", "desc": "雷系核爆"}], "materials": {"boss": "魔偶机心", "bookType": "笃行", "weeklyBoss": "雷电将军", "localSpecialty": "海灵芝", "enemyDrop": "弩箭"}, "tip": "全队元素增伤核心。扩散什么元素就增伤什么，必须在队伍里排在增伤位之前。", "version": "5.0"}, "Neuvillette": {"role": "主C", "weapons": [{"name": "万世流涌大典", "tier": "专武", "desc": "暴伤副词条，重击完美适配"}, {"name": "四风原典", "tier": "五星", "desc": "暴击副词条"}, {"name": "遗祀玉珑", "tier": "四星", "desc": "生命副词条"}], "artifacts": {"set": "4逐影(猎人)", "mainStats": "生命值/水伤加成/暴击伤害"}, "talentOrder": "普攻 ≥ Q技能 > E技能", "teams": [{"name": "那芙万白", "members": "那维莱特+芙宁娜+万叶+白术", "desc": "顶级强攻队"}, {"name": "那维莱特纯水", "members": "那维莱特+莫娜+万叶+钟离", "desc": "次级替代"}], "materials": {"boss": "未知X(水)", "bookType": "公平", "weeklyBoss": "吞星之鲸", "localSpecialty": "苍晶螺", "enemyDrop": "齿轮"}, "tip": "重击是核心输出，吃满三层被动。芙宁娜+万叶是最佳队友。", "version": "5.0"}, "Furina": {"role": "辅助", "weapons": [{"name": "静水流涌之辉", "tier": "专武", "desc": "生命副词条"}, {"name": "腐殖之剑", "tier": "活动", "desc": "充能副词条"}, {"name": "西风剑", "tier": "四星", "desc": "全队充能"}], "artifacts": {"set": "4黄金剧团", "mainStats": "生命值/生命值/暴击率"}, "talentOrder": "Q技能 > E技能 > 普攻", "teams": [{"name": "那芙万白", "members": "那维莱特+芙宁娜+万叶+白术", "desc": "顶级配队"}, {"name": "芙宁娜国家队", "members": "芙宁娜+行秋+班尼特+香菱", "desc": "万能配队"}], "materials": {"boss": "未知X(水)", "bookType": "正义", "weeklyBoss": "吞星之鲸", "localSpecialty": "苍晶螺", "enemyDrop": "齿轮"}, "tip": "烧血全队增伤！Q技能叠气氛值，E技能召唤小动物协同攻击。绑治疗。", "version": "5.0"}, "Arlecchino": {"role": "主C", "weapons": [{"name": "赤月之形", "tier": "专武", "desc": "完美适配"}, {"name": "和璞鸢", "tier": "五星", "desc": "暴击副词条"}, {"name": "决斗之枪", "tier": "四星", "desc": "暴击副词条"}], "artifacts": {"set": "4断章(新套)", "mainStats": "攻击力/火伤加成/暴击伤害"}, "talentOrder": "普攻 > Q技能 > E技能", "teams": [{"name": "仆人纯火", "members": "阿蕾奇诺+班尼特+万叶+钟离", "desc": "直伤队"}, {"name": "仆人蒸发", "members": "阿蕾奇诺+夜兰+班尼特+钟离", "desc": "蒸发队"}], "materials": {"boss": "未知", "bookType": "秩序", "weeklyBoss": "仆人周本", "localSpecialty": "虹彩蔷薇", "enemyDrop": "齿轮"}, "tip": "核心在E技能标记后重击回收。不可被治疗是最大特色，注意护盾保护。", "version": "5.0"}, "Mavuika": {"role": "主C", "weapons": [{"name": "灼燃的炎之剑", "tier": "专武", "desc": "完美适配"}, {"name": "苇海信标", "tier": "五星", "desc": "暴击副词条"}, {"name": "螭骨剑", "tier": "四星", "desc": "暴击副词条"}], "artifacts": {"set": "4黑曜秘典", "mainStats": "攻击力/火伤加成/暴击伤害"}, "talentOrder": "Q技能 > 普攻 > E技能", "teams": [{"name": "玛薇卡蒸发", "members": "玛薇卡+希诺宁+芙宁娜+夜兰", "desc": "纳塔顶级队"}, {"name": "玛薇卡纯火", "members": "玛薇卡+伊安珊+班尼特+万叶", "desc": "火伤队"}], "materials": {"boss": "未知", "bookType": "角逐", "weeklyBoss": "玛薇卡周本", "localSpecialty": "燃愿玛瑙", "enemyDrop": "圣烬"}, "tip": "纳塔核心C，战技进入夜魂加持状态。Q全队加攻。绑定纳塔队友。", "version": "5.0"}, "Xiangling": {"role": "副C", "weapons": [{"name": "薙草之稻光", "tier": "专武", "desc": "充能天花板"}, {"name": "渔获", "tier": "四星", "desc": "免费满精"}, {"name": "西风长枪", "tier": "四星", "desc": "全队充能"}], "artifacts": {"set": "4绝缘", "mainStats": "充能效率/火伤加成/暴击率"}, "talentOrder": "Q技能 > E技能 > 普攻", "teams": [{"name": "雷神国家队", "members": "雷神+行秋+班尼特+香菱", "desc": "平民战神"}, {"name": "万达国际", "members": "公子+万叶+班尼特+香菱", "desc": "顶级反应队"}], "materials": {"boss": "阴燃之珠", "bookType": "勤劳", "weeklyBoss": "公子", "localSpecialty": "绝云椒椒", "enemyDrop": "史莱姆凝液"}, "tip": "核心是Q技能锁面板！在班尼特圈内放Q，获得全额攻击加成后再切人。充能220%+。", "version": "5.0"}, "Xingqiu": {"role": "副C", "weapons": [{"name": "雾切之回光", "tier": "五星", "desc": "高输出"}, {"name": "祭礼剑", "tier": "四星", "desc": "双E稳定充能"}, {"name": "西风剑", "tier": "四星", "desc": "全队充能"}], "artifacts": {"set": "4绝缘", "mainStats": "攻击力/水伤加成/暴击率"}, "talentOrder": "Q技能 > E技能 > 普攻", "teams": [{"name": "雷神国家队", "members": "雷神+行秋+班尼特+香菱", "desc": "国家队核心"}, {"name": "胡行钟", "members": "胡桃+行秋+钟离+夜兰", "desc": "挂水核心"}], "materials": {"boss": "净水之心", "bookType": "黄金", "weeklyBoss": "公子", "localSpecialty": "霓裳花", "enemyDrop": "骗骗花蜜"}, "tip": "六星水神！祭礼剑保证两段E循环，200%+充能。Q的单体挂水是所有火C的最佳拍档。", "version": "5.0"}, "Bennett": {"role": "辅助", "weapons": [{"name": "雾切之回光", "tier": "五星", "desc": "高白字加攻"}, {"name": "暗铁剑", "tier": "三星", "desc": "充能沙漏"}, {"name": "西风剑", "tier": "四星", "desc": "全队充能"}], "artifacts": {"set": "4宗室", "mainStats": "生命值/生命值/治疗加成"}, "talentOrder": "Q技能 > E技能 > 普攻", "teams": [{"name": "雷神国家队", "members": "雷神+行秋+班尼特+香菱", "desc": "国家队核心"}, {"name": "万达国际", "members": "公子+万叶+班尼特+香菱", "desc": "加攻核心"}, {"name": "几乎所有队", "members": "基本每个队都能塞", "desc": "最强四星辅助"}], "materials": {"boss": "常燃火种", "bookType": "抗争", "weeklyBoss": "风魔龙", "localSpecialty": "塞西莉亚花", "enemyDrop": "史莱姆凝液"}, "tip": "六星真神！Q技能持续加攻+治疗。一命移除血量限制。武器优先基础攻击力高的白字。", "version": "5.0"}, "Sucrose": {"role": "辅助", "weapons": [{"name": "祭礼残章", "tier": "四星", "desc": "三E产球"}, {"name": "流浪的晚星", "tier": "四星", "desc": "精通转攻击"}, {"name": "讨龙英杰谭", "tier": "三星", "desc": "切人加攻"}], "artifacts": {"set": "4翠绿(风套)", "mainStats": "元素精通/元素精通/元素精通"}, "talentOrder": "E技能 > Q技能 > 普攻", "teams": [{"name": "砂糖武装", "members": "砂糖+行秋+菲谢尔+北斗", "desc": "感电队"}, {"name": "砂国", "members": "砂糖+行秋+班尼特+香菱", "desc": "万叶下位替代"}], "materials": {"boss": "飓风之种", "bookType": "诗文", "weeklyBoss": "风魔龙", "localSpecialty": "风车菊", "enemyDrop": "史莱姆凝液"}, "tip": "精通拐+聚怪。没有万叶的最佳替代，扩散对应元素触发天赋增伤。", "version": "5.0"}, "Shinobu": {"role": "治疗", "weapons": [{"name": "圣显之钥", "tier": "五星", "desc": "精通加全队"}, {"name": "铁蜂刺", "tier": "锻造", "desc": "精通副词条"}, {"name": "西福斯的月光", "tier": "四星", "desc": "精通转充能"}], "artifacts": {"set": "4乐园(或2精通+2精通)", "mainStats": "元素精通/元素精通/元素精通"}, "talentOrder": "E技能 > Q技能 > 普攻", "teams": [{"name": "超绽放队", "members": "纳西妲+行秋+久岐忍+万叶", "desc": "顶级超绽放"}, {"name": "妮露绽放", "members": "纳西妲+妮露+心海+久岐忍", "desc": "替补位"}], "materials": {"boss": "雷霆数珠", "bookType": "天光", "weeklyBoss": "雷电将军", "localSpecialty": "鸣草", "enemyDrop": "刀镡"}, "tip": "超绽放点火器！E技能随身挂雷触发种子。堆精通到1000，触发超绽放伤害最大化。", "version": "5.0"}};
 
-    function updateStats(count) {
-      document.getElementById('statsBar').textContent = count === undefined
-        ? `共 ${characters.length} 个角色`
-        : `找到 ${count} / ${characters.length} 个角色`;
-    }
+// ===== 术语百科 =====
+const _TERMS = [
+  {term:"站场",def:"角色长时间留在场上进行输出，如胡桃、魈"},
+  {term:"速切",def:"放完技能立刻切人，靠元素爆发打伤害，如雷神、香菱"},
+  {term:"拐",def:"能给队友增加属性或提供增益的角色/技能，如班尼特、万叶"},
+  {term:"面板",def:"角色属性界面中显示的攻击力、暴击率、暴击伤害等数值"},
+  {term:"锁面板",def:"技能释放瞬间锁定当前面板属性，之后不随环境改变而变，如香菱Q"},
+  {term:"元素附着",def:"技能给敌人挂上元素状态的频率和能力，影响反应率"},
+  {term:"产球",def:"技能命中时产生的元素微粒，用于给全队充能"},
+  {term:"蒸发",def:"火+水或水+火，基础倍率1.5/2.0倍，增幅反应"},
+  {term:"融化",def:"火+冰或冰+火，基础倍率1.5/2.0倍，增幅反应"},
+  {term:"绽放",def:"草+水产生草种子，种子可被雷/火触发超/烈绽放"},
+  {term:"激化",def:"草+雷，为后续雷/草伤害提供额外增伤乘区"},
+  {term:"扩散",def:"风+其他元素，造成对应元素伤害并传播给周围敌人"},
+  {term:"感电",def:"水+雷，持续造成雷伤并打断敌人动作"},
+  {term:"冻结",def:"水+冰，控住敌人，可用大剑/岩破冰"},
+  {term:"永冻队",def:"以冻结为核心控场，配合冰套打暴击的配队思路"},
+  {term:"国家队",def:"以香菱+行秋+班尼特为核心的高性价比平民队"},
+  {term:"万达国际",def:"公子+万叶+班尼特+香菱，顶级蒸发反应队"},
+  {term:"神鹤万心",def:"神里+申鹤+万叶+心海，顶级永冻队"},
+  {term:"雷九万班",def:"雷神+九条+万叶+班尼特，顶级雷伤核爆队"},
+  {term:"穿透/减抗",def:"降低敌人对应元素抗性，独立增伤乘区"},
+  {term:"双爆",def:"暴击率和暴击伤害"],
+  {term:"充能",def:"元素充能效率，影响大招能量回复速度"},
+  {term:"精通",def:"元素精通，提升元素反应伤害倍率"},
+  {term:"大保底",def:"角色祈愿90抽内必出，上次歪了下次必是UP角色"},
+  {term:"小保底",def:"90抽内必出五星，但不一定是UP角色，50%概率"},
+  {term:"抗打断",def:"减少受击被打断的概率，如雷神E、行秋雨帘剑"},
+  {term:"夜魂加持",def:"纳塔角色独有的特殊强化状态"},
+  {term:"荒芒",def:"枫丹角色的两种属性(荒性/芒性)，可破特定机制"},
+  {term:"脆弱树脂",def:"增加60体力，建议45级前留着打圣遗物本"},
+  {term:"周本",def:"每周可领取奖励的BOSS副本，掉落天赋突破材料"},
+];
 
-    // 筛选逻辑
-    function applyFilters() {
-      let result = [...characters];
+const _EL_EMOJI = {火:"🔥",水:"💧",草:"🌿",雷:"⚡",风:"🍃",冰:"❄️",岩:"⛰️"};
+const _STARS_S = {5:"⭐⭐⭐⭐⭐",4:"⭐⭐⭐⭐"};
+const _WP_TIER = {"专武":"s","五星":"a","四星":"a","替代":"b","锻造":"b","三星":"c","活动":"a","通用":"c"};
 
-      // 搜索
-      const query = document.getElementById('searchInput').value.trim().toLowerCase();
-      if (query) {
-        result = result.filter(c => c.name.includes(query));
-      }
+// ===== 渲染 =====
+function renderCards(list) {
+  const g = document.getElementById('cardGrid');
+  if(!list.length){g.innerHTML='<div class="empty-state">😔 没有找到符合条件的角色</div>';return}
+  g.innerHTML = list.map(c=>{
+    const gd=_G[c.iconKey];
+    const role=gd?gd.role:'';
+    const img=`https://enka.network/ui/UI_Gacha_AvatarImg_${c.iconKey}.png`;
+    return `<div class="card" data-id="${c.id}">
+      <div class="card-img" style="background-image:url('${img}')">
+        <span class="card-badge">${_EL_EMOJI[c.element]||''} ${c.element}</span>
+        ${role?`<span class="card-role-badge">${role}</span>`:''}
+        <span class="card-stars" style="color:${c.stars===5?'#f3c74d':'#a885c4'}">${_STARS_S[c.stars]}</span>
+      </div>
+      <div class="card-c">
+        <div><h3>${c.name}</h3><span class="wp">${c.weapon}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-      // 过滤按钮
-      if (filterState.type !== 'all') {
-        result = result.filter(c => c[filterState.type] == filterState.value);
-      }
+function updStats(n) {
+  document.getElementById('statsBar').textContent = n===undefined ? `共 ${_C.length} 个角色` : `找到 ${n} / ${_C.length} 个角色`;
+}
 
-      renderCards(result);
-      updateStats(result.length);
-    }
+// ===== 筛选状态 =====
+let _F = {f:'all',v:''};
 
-    // 事件绑定
-    document.addEventListener('DOMContentLoaded', () => {
-      updateStats();
-      renderCards(characters);
+function applyAll() {
+  let r = [..._C];
+  const q = document.getElementById('sInp').value.trim().toLowerCase();
+  if(q) r = r.filter(c=>c.name.includes(q));
+  if(_F.f!=='all') r = r.filter(c=>String(c[_F.f])===_F.v);
+  renderCards(r);
+  updStats(r.length);
+}
 
-      const overlay = document.getElementById('modalOverlay');
-      const closeBtn = document.getElementById('modalClose');
-      const container = document.getElementById('cardContainer');
-      const searchInput = document.getElementById('searchInput');
-      const searchBtn = document.getElementById('searchBtn');
+// ===== 弹窗 =====
+function showModal(c) {
+  const gd=_G[c.iconKey];
+  const hasGuide=!!gd;
+  const b=document.getElementById('mBody');
 
-      // 点卡片 -> 弹窗
-      container.addEventListener('click', (e) => {
-        const card = e.target.closest('.card');
-        if (!card) return;
-        const id = parseInt(card.dataset.id);
-        const c = characters.find(ch => ch.id === id);
-        if (!c) return;
+  let html=`<h2>${c.name}</h2><div class="m-sub">`;
+  html+=`${_EL_EMOJI[c.element]||''} ${c.element} · ${c.weapon}`;
+  if(gd) html+=` · ${gd.role} <span class="v-tag new">v${gd.version||'5.0'}</span>`;
+  html+=`</div>`;
 
-        document.getElementById('modalBody').innerHTML = `
-          <h2>${c.name}</h2>
-          <div class="modal-sub">${elements_emoji[c.element]||''} ${c.element}元素 · ${c.weapon}</div>
-          <div class="modal-section">
-            <h4>📋 基本信息</h4>
-            <div class="modal-info-grid">
-              <span class="modal-info-item"><strong>星级：</strong>${stars[c.stars]}</span>
-              <span class="modal-info-item"><strong>武器：</strong>${c.weapon}</span>
-              <span class="modal-info-item"><strong>元素：</strong>${c.element}</span>
-            </div>
-          </div>
-          <div class="modal-section">
-            <h4>🖼️ 角色立绘</h4>
-            <div style="display:flex;gap:0.5rem;">
-              <img src="https://enka.network/ui/UI_AvatarIcon_${c.iconKey}.png" style="width:80px;height:80px;border-radius:12px;background:#f3ede5;" alt="${c.name}头像">
-              <img src="https://enka.network/ui/UI_Gacha_AvatarImg_${c.iconKey}.png" style="width:200px;height:80px;object-fit:cover;border-radius:12px;background:#f3ede5;" alt="${c.name}立绘" onerror="this.style.display='none'">
-            </div>
-          </div>
-        `;
-        overlay.classList.add('active');
-      });
+  // 基础信息
+  html+=`<div class="sec"><h4>📋 基本信息</h4><div class="info-grid">`;
+  html+=`<span class="info-item"><strong>星级：</strong>${_STARS_S[c.stars]}</span>`;
+  html+=`<span class="info-item"><strong>元素：</strong>${c.element}</span>`;
+  html+=`<span class="info-item"><strong>武器：</strong>${c.weapon}</span>`;
+  if(gd) html+=`<span class="info-item"><strong>定位：</strong>${gd.role}</span>`;
+  html+=`</div></div>`;
 
-      closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) overlay.classList.remove('active');
-      });
-
-      // 筛选按钮
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const filter = btn.dataset.filter;
-          const value = btn.dataset.value;
-          
-          if (filter === 'all') {
-            filterState = { type: 'all', value: '' };
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-          } else {
-            filterState = { type: filter, value: value };
-            document.querySelectorAll('.filter-btn').forEach(b => {
-              if (b.dataset.filter === filter && b.dataset.value === value) {
-                b.classList.add('active');
-              } else if (b.dataset.filter !== 'all') {
-                b.classList.remove('active');
-              }
-            });
-          }
-          btn.classList.add('active');
-          applyFilters();
-        });
-      });
-
-      // 搜索
-      searchBtn.addEventListener('click', applyFilters);
-      searchInput.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') applyFilters();
-      });
+  if(hasGuide){
+    // 武器推荐
+    html+=`<div class="sec"><h4>⚔️ 推荐武器</h4><div class="wp-list">`;
+    gd.weapons.forEach(w=>{
+      const tier=w.tier;
+      const cls=_WP_TIER[tier]||'b';
+      html+=`<div class="wp-item"><span class="wp-tier ${cls}">${tier}</span><strong>${w.name}</strong><span style="color:#8b7355;font-size:.75rem">${w.desc||''}</span></div>`;
     });
-  </script>
+    html+=`</div></div>`;
+
+    // 圣遗物
+    html+=`<div class="sec"><h4>🛡️ 圣遗物推荐</h4>`;
+    html+=`<div class="info-grid">`;
+    html+=`<span class="info-item"><strong>套装：</strong>${gd.artifacts.set}</span>`;
+    html+=`<span class="info-item"><strong>主词条：</strong>${gd.artifacts.mainStats}</span>`;
+    html+=`</div></div>`;
+
+    // 天赋
+    html+=`<div class="sec"><h4>📖 天赋优先级</h4>`;
+    html+=`<span class="info-item">${gd.talentOrder}</span></div>`;
+
+    // 配队
+    html+=`<div class="sec"><h4>🤝 推荐配队</h4>`;
+    gd.teams.forEach(t=>{
+      html+=`<div class="team-card"><div class="tm-name">${t.name}</div>`;
+      html+=`<div class="tm-members">${t.members}</div>`;
+      if(t.desc) html+=`<div class="tm-desc">${t.desc}</div>`;
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+
+    // 材料
+    html+=`<div class="sec"><h4>📦 突破材料</h4><div class="info-grid">`;
+    const m=gd.materials;
+    html+=`<span class="info-item"><strong>BOSS：</strong>${m.boss}</span>`;
+    html+=`<span class="info-item"><strong>天赋书：</strong>${m.bookType}</span>`;
+    html+=`<span class="info-item"><strong>周本：</strong>${m.weeklyBoss}</span>`;
+    html+=`<span class="info-item"><strong>特产：</strong>${m.localSpecialty}</span>`;
+    html+=`<span class="info-item"><strong>怪物掉落：</strong>${m.enemyDrop}</span>`;
+    html+=`</div></div>`;
+
+    // 小贴士
+    if(gd.tip){
+      html+=`<div class="sec"><h4>💡 攻略小贴士</h4>`;
+      html+=`<div class="tip-box">${gd.tip}</div></div>`;
+    }
+
+    // 版本
+    html+=`<div style="text-align:right;font-size:.7rem;color:#aaa;margin-top:.5rem">攻略最后更新：v${gd.version||'5.0'}</div>`;
+  } else {
+    html+=`<div class="sec"><p style="color:#8b7355;font-size:.85rem">📝 该角色的完整攻略正在编写中。详情可通过搜索了解。</p></div>`;
+  }
+
+  b.innerHTML=html;
+  document.getElementById('mo').classList.add('active');
+}
+
+// ===== 养成计算器 =====
+function buildCalculator() {
+  const sel=document.getElementById('calcChar');
+  _C.forEach(c=>{
+    const o=document.createElement('option');
+    o.value=c.iconKey;
+    o.textContent=c.name;
+    sel.appendChild(o);
+  });
+}
+
+function calcMaterials() {
+  const ck=document.getElementById('calcChar').value;
+  const lv=document.getElementById('calcLvl').value;
+  if(!ck||!lv){document.getElementById('calcResult').className='calc-result';return}
+  const char=_C.find(c=>c.iconKey===ck);
+  if(!char)return;
+  const gd=_G[ck];
+  const lvNum=parseInt(lv);
+
+  // 材料估算（简化版）
+  const gemNeeded = lvNum>=80 ? '6个金色+8个紫色+...' : lvNum>=60 ? '3个紫色+...' : '少量';
+  const mora = lvNum>=80 ? '约 50万摩拉' : lvNum>=60 ? '约 20万摩拉' : '约 8万摩拉';
+  const exp = lvNum>=80 ? '约 170本大经验书' : lvNum>=60 ? '约 60本' : '约 20本';
+
+  let html=`<h5>📊 ${char.name} → ${lv}级 养成计算</h5>`;
+  html+=`<table class="material-table"><tr><td>摩拉</td><td>${mora}</td></tr>`;
+  html+=`<tr><td>经验书</td><td>${exp}</td></tr>`;
+  html+=`<tr><td>元素宝石</td><td>${gemNeeded}</td></tr>`;
+  if(gd){
+    const m=gd.materials;
+    html+=`<tr><td>BOSS材料</td><td>${m.boss}</td></tr>`;
+    html+=`<tr><td>特产</td><td>${m.localSpecialty}</td></tr>`;
+    html+=`<tr><td>怪物掉落</td><td>${m.enemyDrop}</td></tr>`;
+  }
+  html+=`</table>`;
+
+  // 刷取建议
+  html+=`<div class="tip-box" style="margin-top:.5rem">`;
+  html+=`💡 <strong>建议：</strong>提前准备所需材料，周本每周记得打！`;
+  html+=` 脆弱树脂留到45级后刷圣遗物本。`;
+  html+=`</div>`;
+
+  const r=document.getElementById('calcResult');
+  r.innerHTML=html;
+  r.className='calc-result show';
+}
+
+// ===== 术语百科 =====
+function buildGlossary() {
+  const g=document.getElementById('glossaryGrid');
+  g.innerHTML=_TERMS.map(t=>
+    `<div class="gloss-item"><div class="gloss-term">${t.term}</div><div class="gloss-def">${t.def}</div></div>`
+  ).join('');
+}
+
+// ===== 初始化 =====
+document.addEventListener('DOMContentLoaded',()=>{
+  updStats();
+  renderCards(_C);
+  buildCalculator();
+  buildGlossary();
+
+  // 选项卡
+  document.querySelectorAll('.nav-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.page-section').forEach(s=>s.style.display='none');
+      const id=tab.dataset.tab;
+      if(id==='chars') document.getElementById('pageChars').style.display='block';
+      else if(id==='calc'){
+        document.getElementById('pageCalc').style.display='block';
+        document.getElementById('pageChars').style.display='none';
+      }
+      else if(id==='glossary'){
+        document.getElementById('pageGlossary').style.display='block';
+        document.getElementById('pageChars').style.display='none';
+      }
+      // 显示hideen
+      if(id==='chars'){
+        document.getElementById('filterBar').style.display='block';
+      } else {
+        document.getElementById('filterBar').style.display='none';
+      }
+    });
+  });
+
+  // 筛选
+  document.querySelectorAll('.f-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(btn.classList.contains('all')){
+        _F={f:'all',v:''};
+        document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      } else {
+        const f=btn.dataset.f, v=btn.dataset.v;
+        _F={f,v};
+        document.querySelectorAll('.f-btn').forEach(b=>{
+          if(b.dataset.f===f&&b.dataset.v===v) b.classList.add('active');
+          else if(!b.classList.contains('all')) b.classList.remove('active');
+        });
+      }
+      applyAll();
+    });
+  });
+
+  // 搜索
+  document.getElementById('sBtn').addEventListener('click',applyAll);
+  document.getElementById('sInp').addEventListener('keyup',e=>{if(e.key==='Enter')applyAll()});
+
+  // 卡片点击
+  document.getElementById('cardGrid').addEventListener('click',e=>{
+    const card=e.target.closest('.card');
+    if(!card)return;
+    const id=parseInt(card.dataset.id);
+    const c=_C.find(ch=>ch.id===id);
+    if(c)showModal(c);
+  });
+
+  // 弹窗关闭
+  document.getElementById('mClose').addEventListener('click',()=>document.getElementById('mo').classList.remove('active'));
+  document.getElementById('mo').addEventListener('click',e=>{if(e.target===e.currentTarget)document.getElementById('mo').classList.remove('active')});
+
+  // 计算器
+  document.getElementById('calcBtn').addEventListener('click',calcMaterials);
+
+  // 设置默认角色
+  document.getElementById('pageChars').style.display='block';
+  document.getElementById('pageCalc').style.display='none';
+  document.getElementById('pageGlossary').style.display='none';
+});
+</script>
 </body>
 </html>
