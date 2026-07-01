@@ -318,6 +318,7 @@
     <p style="font-size:.82rem;color:#6b5a48;margin-bottom:.8rem">
       勾选你拥有的角色，数据自动保存在浏览器。系统会基于你的BOX推荐配队和养成方案。
       <span id="boxCount" style="font-weight:700;color:#4a3929"></span>
+      <button class="calc-btn" id="boxGenBtn" style="font-size:.8rem;padding:.2rem .7rem;margin-left:.5rem">➡️ 生成推荐</button>
     </p>
     <div id="boxShareArea" style="display:none;margin-bottom:.7rem;background:#f9f5ef;border-radius:12px;padding:.6rem .8rem">
       <label style="font-size:.82rem;font-weight:700">分享码（复制发给朋友）：</label>
@@ -604,7 +605,7 @@ function renderBox() {
     </label>`;
   }).join('');
 
-  // 勾选事件监听
+    // 勾选事件监听 - 只保存，不触发推荐
   g.querySelectorAll('input[type=checkbox]').forEach(cb=>{
     cb.addEventListener('change',()=>{
       const box = getBox();
@@ -616,29 +617,15 @@ function renderBox() {
         if(idx>=0) box.splice(idx,1);
       }
       saveBox(box);
-      // 更新计数
       document.getElementById('boxCount').textContent = '已选 '+box.length+' / '+_C.length+' 个角色';
-      // 更新推荐（不重绘网格）
-      if(box.length>=2){
-        document.getElementById('boxRecommend').style.display='block';
-        document.getElementById('boxRecContent').innerHTML = generateRecommendations(box);
-      } else {
-        document.getElementById('boxRecommend').style.display='none';
-      }
     });
   });
 
   // 更新计数
   document.getElementById('boxCount').textContent = `已选 ${box.length} / ${_C.length} 个角色`;
 
-  // 智能推荐
-  if(box.length>=2){
-    const rec = document.getElementById('boxRecommend');
-    rec.style.display='block';
-    document.getElementById('boxRecContent').innerHTML = generateRecommendations(box);
-  } else {
-    document.getElementById('boxRecommend').style.display='none';
-  }
+  // 智能推荐 - 初始隐藏，由按钮触发
+  document.getElementById('boxRecommend').style.display='none';
 }
 
 // 生成推荐
@@ -825,6 +812,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     alert('已复制到剪贴板');
   });
   document.getElementById('boxDoImportBtn').addEventListener('click',doImportBox);
+  document.getElementById('boxGenBtn').addEventListener('click',()=>{
+    const box = getBox();
+    if(box.length<2){alert('至少勾选2个角色才能生成推荐');return}
+    document.getElementById('boxRecommend').style.display='block';
+    document.getElementById('boxRecContent').innerHTML = generateRecommendations(box);
+  });
 
   // 设置默认角色
   document.getElementById('pageChars').style.display='block';
