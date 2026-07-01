@@ -3,23 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>原神攻略站 · MVP</title>
+  <title>原神全角色图鉴</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
       background: #f5f2eb;
       color: #3b2e24;
-      display: flex;
-      flex-direction: column;
       min-height: 100vh;
     }
-
     header {
       background: linear-gradient(135deg, #4a3929, #6b5a48);
       color: #f7f0e1;
@@ -29,7 +21,6 @@
       top: 0;
       z-index: 10;
     }
-
     .header-content {
       max-width: 1200px;
       margin: 0 auto;
@@ -37,238 +28,177 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
+      gap: 0.5rem;
     }
-
     .logo {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: bold;
-      letter-spacing: 2px;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-
-    .logo span {
-      background: #d4a373;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      color: #2e241a;
+    .logo span { background: #d4a373; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; color: #2e241a; }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
     }
-
     .search-bar {
       display: flex;
-      align-items: center;
       background: #fff7ed;
       border-radius: 30px;
-      padding: 0.3rem 0.3rem 0.3rem 1.2rem;
-      margin-top: 0.5rem;
+      padding: 0.2rem 0.2rem 0.2rem 1rem;
     }
-
     .search-bar input {
-      border: none;
-      background: transparent;
-      outline: none;
-      font-size: 1rem;
-      width: 200px;
-      color: #3b2e24;
+      border: none; background: transparent; outline: none;
+      font-size: 0.9rem; width: 140px; color: #3b2e24;
     }
-
     .search-bar button {
-      background: #d4a373;
-      border: none;
-      border-radius: 30px;
-      padding: 0.5rem 1.2rem;
-      color: #2e241a;
-      font-weight: bold;
+      background: #d4a373; border: none; border-radius: 30px;
+      padding: 0.4rem 1rem; color: #2e241a; font-weight: bold; cursor: pointer;
+    }
+    .filter-group {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #f7f0e1;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: 0.2s;
     }
-
-    .search-bar button:hover {
-      background: #b88657;
-    }
+    .filter-btn:hover { background: rgba(255,255,255,0.25); }
+    .filter-btn.active { background: #d4a373; color: #2e241a; border-color: #d4a373; }
 
     .container {
       max-width: 1200px;
-      margin: 2rem auto;
+      margin: 1.5rem auto;
       padding: 0 1.5rem;
-      flex: 1;
     }
-
-    .section-title {
-      font-size: 1.8rem;
-      margin-bottom: 1.5rem;
-      border-left: 6px solid #d4a373;
-      padding-left: 1rem;
+    .stats-bar {
+      font-size: 0.9rem;
+      color: #9b7b5c;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0;
     }
-
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.8rem;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 1rem;
     }
-
     .card {
       background: white;
-      border-radius: 20px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-      transition: transform 0.25s ease, box-shadow 0.25s;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
     }
-
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 14px 26px rgba(0,0,0,0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.13);
     }
-
     .card-img {
-      height: 180px;
+      height: 170px;
       background-size: cover;
-      background-position: center 15%;
+      background-position: center 10%;
       background-color: #e8d9c8;
       position: relative;
     }
-
-    .card-img .element-badge {
+    .card-stars {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(0,0,0,0.55);
+      bottom: 6px;
+      left: 8px;
+      font-size: 0.7rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    }
+    .card-element {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.5);
       color: white;
-      border-radius: 30px;
-      padding: 0.2rem 0.9rem;
-      font-size: 0.8rem;
+      border-radius: 20px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.75rem;
       backdrop-filter: blur(4px);
     }
-
     .card-content {
-      padding: 1.2rem 1.2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
+      padding: 0.7rem 0.8rem 0.8rem;
     }
-
     .card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.3rem;
+      font-size: 1rem;
       color: #2e241a;
     }
-
     .card .role {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: #9b7b5c;
-      margin-bottom: 0.7rem;
       font-weight: 500;
     }
 
-    .card p {
-      font-size: 0.9rem;
-      color: #5e4b38;
-      line-height: 1.5;
-      flex: 1;
-    }
-
-    .card .btn-detail {
-      margin-top: 1rem;
-      align-self: flex-start;
-      background: #f3ede5;
-      border: none;
-      padding: 0.5rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 600;
-      color: #4a3929;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .card .btn-detail:hover {
-      background: #d4a373;
-      color: white;
+    .empty-state {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 3rem;
+      color: #8b7355;
     }
 
     /* 弹窗 */
     .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.6);
       backdrop-filter: blur(5px);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 100;
-      visibility: hidden;
-      opacity: 0;
-      transition: 0.2s ease;
+      visibility: hidden; opacity: 0;
+      transition: 0.2s;
     }
-
-    .modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-
+    .modal-overlay.active { visibility: visible; opacity: 1; }
     .modal {
       background: white;
-      max-width: 550px;
+      max-width: 480px;
       width: 90%;
-      border-radius: 28px;
+      border-radius: 24px;
       padding: 2rem;
       position: relative;
       box-shadow: 0 20px 40px rgba(0,0,0,0.3);
       max-height: 85vh;
       overflow-y: auto;
     }
-
     .modal-close {
-      position: absolute;
-      top: 1rem;
-      right: 1.4rem;
-      background: none;
-      border: none;
-      font-size: 2rem;
-      cursor: pointer;
-      color: #8b7355;
+      position: absolute; top: 0.8rem; right: 1.2rem;
+      background: none; border: none; font-size: 2rem;
+      cursor: pointer; color: #8b7355;
     }
-
-    .modal h2 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .modal .element {
-      color: #b88657;
-      font-weight: 600;
-      margin-bottom: 1.2rem;
-    }
-
-    .modal-section {
-      margin-bottom: 1.5rem;
-    }
-
+    .modal h2 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+    .modal .modal-sub { color: #b88657; font-weight: 600; margin-bottom: 1.2rem; font-size: 0.9rem; }
+    .modal-section { margin-bottom: 1rem; }
     .modal-section h4 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       border-bottom: 2px solid #f3ede5;
       padding-bottom: 0.3rem;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.5rem;
     }
-
-    .modal-section ul {
-      list-style: none;
-      padding-left: 0.4rem;
-    }
-
-    .modal-section li {
-      margin-bottom: 0.4rem;
+    .modal-info-grid {
       display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
+    .modal-info-item {
+      background: #f3ede5;
+      padding: 0.4rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+    .modal-info-item strong { color: #4a3929; }
 
     footer {
       text-align: center;
@@ -276,215 +206,193 @@
       color: #7b6e5e;
       background: #e3d9cc;
       margin-top: 2rem;
+      font-size: 0.85rem;
     }
 
     @media (max-width: 600px) {
-      .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .search-bar {
-        width: 100%;
-      }
-      .search-bar input {
-        width: 100%;
-      }
+      .header-content { flex-direction: column; align-items: stretch; }
+      .card-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
     }
   </style>
 </head>
 <body>
   <header>
     <div class="header-content">
-      <div class="logo">
-        🗡️ 原神攻略站 <span>MVP</span>
+      <div class="logo">🗡️ 原神角色图鉴 <span>全角色</span></div>
+      <div class="controls">
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="搜索角色名..." autocomplete="off">
+          <button id="searchBtn">搜索</button>
+        </div>
       </div>
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="搜索角色或元素..." autocomplete="off">
-        <button id="searchBtn">搜索</button>
-      </div>
+    </div>
+    <div class="filter-group" style="margin-top:0.5rem;max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1.5rem;">
+      <button class="filter-btn active" data-filter="all">全部</button>
+      <button class="filter-btn" data-filter="element" data-value="火">🔥 火</button>
+      <button class="filter-btn" data-filter="element" data-value="水">💧 水</button>
+      <button class="filter-btn" data-filter="element" data-value="草">🌿 草</button>
+      <button class="filter-btn" data-filter="element" data-value="雷">⚡ 雷</button>
+      <button class="filter-btn" data-filter="element" data-value="风">🍃 风</button>
+      <button class="filter-btn" data-filter="element" data-value="冰">❄️ 冰</button>
+      <button class="filter-btn" data-filter="element" data-value="岩">⛰️ 岩</button>
+      <button class="filter-btn" data-filter="stars" data-value="5">⭐⭐⭐⭐⭐</button>
+      <button class="filter-btn" data-filter="stars" data-value="4">⭐⭐⭐⭐</button>
+      <button class="filter-btn" data-filter="weapon" data-value="单手剑">🗡️ 单手剑</button>
+      <button class="filter-btn" data-filter="weapon" data-value="双手剑">⚔️ 双手剑</button>
+      <button class="filter-btn" data-filter="weapon" data-value="长柄武器">🔱 长柄</button>
+      <button class="filter-btn" data-filter="weapon" data-value="法器">🔮 法器</button>
+      <button class="filter-btn" data-filter="weapon" data-value="弓">🏹 弓</button>
     </div>
   </header>
 
   <div class="container">
-    <h2 class="section-title">🔥 热门角色攻略</h2>
-    <div class="card-grid" id="cardContainer">
-      <!-- JS 动态生成 -->
-    </div>
+    <div class="stats-bar" id="statsBar"></div>
+    <div class="card-grid" id="cardContainer"></div>
   </div>
 
-  <!-- 详情弹窗 -->
   <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" id="modalContent">
+    <div class="modal">
       <button class="modal-close" id="modalClose">&times;</button>
       <div id="modalBody"></div>
     </div>
   </div>
 
   <footer>
-    © 2026 攻略站MVP · 数据仅供演示
+    © 2026 原神角色图鉴 · 非官方粉丝站 · 数据来源于 EnkaNetwork & Dimbreath · 仅供学习参考
   </footer>
 
   <script>
-    // 模拟攻略数据（可扩展）
-    const guides = [
-      {
-        id: 1,
-        name: "胡桃",
-        title: "雪霁梅香 · 往生堂主",
-        element: "火",
-        role: "主C / 长柄武器",
-        image: "https://enka.network/ui/UI_Gacha_AvatarImg_Hutao.png",
-        summary: "高爆发火伤主C，依赖生命值转攻击，配合行秋蒸发打出巨额伤害。",
-        skills: ["蝶引来生 · 元素战技", "安神秘法 · 元素爆发", "血之灶火 · 固有天赋"],
-        team: ["胡桃 + 行秋 + 钟离 + 夜兰", "胡桃 + 行秋 + 托马 + 万叶"],
-        tips: "半血以下伤害更高，注意控血与护盾。"
-      },
-      {
-        id: 2,
-        name: "钟离",
-        title: "尘世闲游 · 岩王帝君",
-        element: "岩",
-        role: "辅助 / 长柄武器",
-        image: "https://enka.network/ui/UI_Gacha_AvatarImg_Zhongli.png",
-        summary: "提供全游戏最强护盾，同时减抗增伤，万能辅助。",
-        skills: ["地心 · 元素战技", "天星 · 元素爆发", "悬岩宸断 · 固有天赋"],
-        team: ["任意主C + 钟离", "胡桃+行秋+钟离", "甘雨+钟离+香菱"],
-        tips: "堆生命值即可，护盾厚度基于最大生命。"
-      },
-      {
-        id: 3,
-        name: "雷电将军",
-        title: "一心净土 · 雷之神",
-        element: "雷",
-        role: "辅助/副C / 长柄武器",
-        image: "https://enka.network/ui/UI_Gacha_AvatarImg_Shougun.png",
-        summary: "全队充能核心，元素爆发期间提供高额雷伤与全队回能。",
-        skills: ["神变·恶曜开眼", "奥义·梦想真说", "殊胜之御体"],
-        team: ["雷神国家队：雷神+行秋+班尼特+香菱", "雷九万班：雷神+九条+万叶+班尼特"],
-        tips: "充能效率转化为雷伤加成，绝缘套最佳。"
-      },
-      {
-        id: 4,
-        name: "纳西妲",
-        title: "白草净华 · 草之神",
-        element: "草",
-        role: "辅助/副C / 法器",
-        image: "https://enka.network/ui/UI_Gacha_AvatarImg_Nahida.png",
-        summary: "草反应核心，提供长时间挂草与精通加成。",
-        skills: ["所闻遍计", "心景幻成", "净善摄受明论"],
-        team: ["妮露绽放队", "提纳里激化队", "纳西妲+行秋+久岐忍超绽放"],
-        tips: "优先堆元素精通至1000，草套减抗。"
-      },
-      {
-        id: 5,
-        name: "枫原万叶",
-        title: "红叶逐荒波 · 浪人",
-        element: "风",
-        role: "辅助 / 单手剑",
-        image: "https://enka.network/ui/UI_Gacha_AvatarImg_Kazuha.png",
-        summary: "聚怪增伤一体，根据扩散元素提供对应伤害加成。",
-        skills: ["千早振", "万叶之一刀", "风物之诗咏"],
-        team: ["万达国际：公子+万叶+班尼特+香菱", "神鹤万心"],
-        tips: "精通三件套，扩散对应元素即可增伤。"
-      }
-    ];
+    // ===== 全角色数据 =====
+    const characters = [{"id": 10000035, "name": "七七", "element": "冰", "weapon": "单手剑", "stars": 5, "iconKey": "Qiqi"}, {"id": 10000114, "name": "丝柯克", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "SkirkNew"}, {"id": 10000051, "name": "优菈", "element": "冰", "weapon": "双手剑", "stars": 5, "iconKey": "Eula"}, {"id": 10000098, "name": "克洛琳德", "element": "雷", "weapon": "单手剑", "stars": 5, "iconKey": "Clorinde"}, {"id": 10000058, "name": "八重神子", "element": "雷", "weapon": "法器", "stars": 5, "iconKey": "Yae"}, {"id": 10000042, "name": "刻晴", "element": "雷", "weapon": "单手剑", "stars": 5, "iconKey": "Keqing"}, {"id": 10000094, "name": "千织", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Chiori"}, {"id": 10000029, "name": "可莉", "element": "火", "weapon": "法器", "stars": 5, "iconKey": "Klee"}, {"id": 10000112, "name": "埃斯科菲耶", "element": "冰", "weapon": "长柄武器", "stars": 5, "iconKey": "Escoffier"}, {"id": 10000062, "name": "埃洛伊", "element": "冰", "weapon": "弓", "stars": 5, "iconKey": "Aloy"}, {"id": 10000101, "name": "基尼奇", "element": "草", "weapon": "双手剑", "stars": 5, "iconKey": "Kinich"}, {"id": 10000060, "name": "夜兰", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Yelan"}, {"id": 10000070, "name": "妮露", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Nilou"}, {"id": 10000091, "name": "娜维娅", "element": "岩", "weapon": "双手剑", "stars": 5, "iconKey": "Navia"}, {"id": 10000049, "name": "宵宫", "element": "火", "weapon": "弓", "stars": 5, "iconKey": "Yoimiya"}, {"id": 10000095, "name": "希格雯", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Sigewinne"}, {"id": 10000103, "name": "希诺宁", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Xilonen"}, {"id": 10000104, "name": "恰斯卡", "element": "风", "weapon": "弓", "stars": 5, "iconKey": "Chasca"}, {"id": 10000069, "name": "提纳里", "element": "草", "weapon": "弓", "stars": 5, "iconKey": "Tighnari"}, {"id": 10000084, "name": "林尼", "element": "火", "weapon": "弓", "stars": 5, "iconKey": "Liney"}, {"id": 10000047, "name": "枫原万叶", "element": "风", "weapon": "单手剑", "stars": 5, "iconKey": "Kazuha"}, {"id": 10000109, "name": "梦见月瑞希", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Mizuki"}, {"id": 10000075, "name": "流浪者", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Wanderer"}, {"id": 10000022, "name": "温迪", "element": "风", "weapon": "弓", "stars": 5, "iconKey": "Venti"}, {"id": 10000102, "name": "玛拉妮", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Mualani"}, {"id": 10000106, "name": "玛薇卡", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Mavuika"}, {"id": 10000054, "name": "珊瑚宫心海", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Kokomi"}, {"id": 10000003, "name": "琴", "element": "风", "weapon": "单手剑", "stars": 5, "iconKey": "Qin"}, {"id": 10000111, "name": "瓦雷莎", "element": "雷", "weapon": "法器", "stars": 5, "iconKey": "Varesa"}, {"id": 10000037, "name": "甘雨", "element": "冰", "weapon": "弓", "stars": 5, "iconKey": "Ganyu"}, {"id": 10000063, "name": "申鹤", "element": "冰", "weapon": "长柄武器", "stars": 5, "iconKey": "Shenhe"}, {"id": 10000082, "name": "白术", "element": "草", "weapon": "法器", "stars": 5, "iconKey": "Baizhuer"}, {"id": 10000066, "name": "神里绫人", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Ayato"}, {"id": 10000002, "name": "神里绫华", "element": "冰", "weapon": "单手剑", "stars": 5, "iconKey": "Ayaka"}, {"id": 10000073, "name": "纳西妲", "element": "草", "weapon": "法器", "stars": 5, "iconKey": "Nahida"}, {"id": 10000046, "name": "胡桃", "element": "火", "weapon": "长柄武器", "stars": 5, "iconKey": "Hutao"}, {"id": 10000078, "name": "艾尔海森", "element": "草", "weapon": "单手剑", "stars": 5, "iconKey": "Alhatham"}, {"id": 10000099, "name": "艾梅莉埃", "element": "草", "weapon": "长柄武器", "stars": 5, "iconKey": "Emilie"}, {"id": 10000089, "name": "芙宁娜", "element": "水", "weapon": "单手剑", "stars": 5, "iconKey": "Furina"}, {"id": 10000107, "name": "茜特菈莉", "element": "冰", "weapon": "法器", "stars": 5, "iconKey": "Citlali"}, {"id": 10000057, "name": "荒泷一斗", "element": "岩", "weapon": "双手剑", "stars": 5, "iconKey": "Itto"}, {"id": 10000041, "name": "莫娜", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Mona"}, {"id": 10000086, "name": "莱欧斯利", "element": "冰", "weapon": "法器", "stars": 5, "iconKey": "Wriothesley"}, {"id": 10000071, "name": "赛诺", "element": "雷", "weapon": "长柄武器", "stars": 5, "iconKey": "Cyno"}, {"id": 10000033, "name": "达达利亚", "element": "水", "weapon": "弓", "stars": 5, "iconKey": "Tartaglia"}, {"id": 10000016, "name": "迪卢克", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Diluc"}, {"id": 10000079, "name": "迪希雅", "element": "火", "weapon": "双手剑", "stars": 5, "iconKey": "Dehya"}, {"id": 10000087, "name": "那维莱特", "element": "水", "weapon": "法器", "stars": 5, "iconKey": "Neuvillette"}, {"id": 10000030, "name": "钟离", "element": "岩", "weapon": "长柄武器", "stars": 5, "iconKey": "Zhongli"}, {"id": 10000093, "name": "闲云", "element": "风", "weapon": "法器", "stars": 5, "iconKey": "Liuyun"}, {"id": 10000096, "name": "阿蕾奇诺", "element": "火", "weapon": "长柄武器", "stars": 5, "iconKey": "Arlecchino"}, {"id": 10000038, "name": "阿贝多", "element": "岩", "weapon": "单手剑", "stars": 5, "iconKey": "Albedo"}, {"id": 10000052, "name": "雷电将军", "element": "雷", "weapon": "长柄武器", "stars": 5, "iconKey": "Shougun"}, {"id": 10000026, "name": "魈", "element": "风", "weapon": "长柄武器", "stars": 5, "iconKey": "Xiao"}, {"id": 10000006, "name": "丽莎", "element": "雷", "weapon": "法器", "stars": 4, "iconKey": "Lisa"}, {"id": 10000065, "name": "久岐忍", "element": "雷", "weapon": "单手剑", "stars": 4, "iconKey": "Shinobu"}, {"id": 10000056, "name": "九条裟罗", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Sara"}, {"id": 10000064, "name": "云堇", "element": "岩", "weapon": "长柄武器", "stars": 4, "iconKey": "Yunjin"}, {"id": 10000055, "name": "五郎", "element": "岩", "weapon": "弓", "stars": 4, "iconKey": "Gorou"}, {"id": 10000110, "name": "伊安珊", "element": "雷", "weapon": "长柄武器", "stars": 4, "iconKey": "Iansan"}, {"id": 10000113, "name": "伊法", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Ifa"}, {"id": 10000027, "name": "凝光", "element": "岩", "weapon": "法器", "stars": 4, "iconKey": "Ningguang"}, {"id": 10000015, "name": "凯亚", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Kaeya"}, {"id": 10000024, "name": "北斗", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Beidou"}, {"id": 10000081, "name": "卡维", "element": "草", "weapon": "双手剑", "stars": 4, "iconKey": "Kaveh"}, {"id": 10000100, "name": "卡齐娜", "element": "岩", "weapon": "长柄武器", "stars": 4, "iconKey": "Kachina"}, {"id": 10000092, "name": "嘉明", "element": "火", "weapon": "双手剑", "stars": 4, "iconKey": "Gaming"}, {"id": 10000072, "name": "坎蒂丝", "element": "水", "weapon": "长柄武器", "stars": 4, "iconKey": "Candace"}, {"id": 10000090, "name": "夏沃蕾", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Chevreuse"}, {"id": 10000088, "name": "夏洛蒂", "element": "冰", "weapon": "法器", "stars": 4, "iconKey": "Charlotte"}, {"id": 10000068, "name": "多莉", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Dori"}, {"id": 10000021, "name": "安柏", "element": "火", "weapon": "弓", "stars": 4, "iconKey": "Ambor"}, {"id": 10000050, "name": "托马", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Tohma"}, {"id": 10000053, "name": "早柚", "element": "风", "weapon": "双手剑", "stars": 4, "iconKey": "Sayu"}, {"id": 10000067, "name": "柯莱", "element": "草", "weapon": "弓", "stars": 4, "iconKey": "Collei"}, {"id": 10000105, "name": "欧洛伦", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Olorun"}, {"id": 10000048, "name": "烟绯", "element": "火", "weapon": "法器", "stars": 4, "iconKey": "Feiyan"}, {"id": 10000076, "name": "珐露珊", "element": "风", "weapon": "弓", "stars": 4, "iconKey": "Faruzan"}, {"id": 10000032, "name": "班尼特", "element": "火", "weapon": "单手剑", "stars": 4, "iconKey": "Bennett"}, {"id": 10000083, "name": "琳妮特", "element": "风", "weapon": "单手剑", "stars": 4, "iconKey": "Linette"}, {"id": 10000077, "name": "瑶瑶", "element": "草", "weapon": "长柄武器", "stars": 4, "iconKey": "Yaoyao"}, {"id": 10000043, "name": "砂糖", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Sucrose"}, {"id": 10000080, "name": "米卡", "element": "冰", "weapon": "长柄武器", "stars": 4, "iconKey": "Mika"}, {"id": 10000061, "name": "绮良良", "element": "草", "weapon": "单手剑", "stars": 4, "iconKey": "Momoka"}, {"id": 10000045, "name": "罗莎莉亚", "element": "冰", "weapon": "长柄武器", "stars": 4, "iconKey": "Rosaria"}, {"id": 10000014, "name": "芭芭拉", "element": "水", "weapon": "法器", "stars": 4, "iconKey": "Barbara"}, {"id": 10000074, "name": "莱依拉", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Layla"}, {"id": 10000085, "name": "菲米尼", "element": "冰", "weapon": "双手剑", "stars": 4, "iconKey": "Freminet"}, {"id": 10000031, "name": "菲谢尔", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Fischl"}, {"id": 10000108, "name": "蓝砚", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Lanyan"}, {"id": 10000025, "name": "行秋", "element": "水", "weapon": "单手剑", "stars": 4, "iconKey": "Xingqiu"}, {"id": 10000034, "name": "诺艾尔", "element": "岩", "weapon": "双手剑", "stars": 4, "iconKey": "Noel"}, {"id": 10000097, "name": "赛索斯", "element": "雷", "weapon": "弓", "stars": 4, "iconKey": "Sethos"}, {"id": 10000044, "name": "辛焱", "element": "火", "weapon": "双手剑", "stars": 4, "iconKey": "Xinyan"}, {"id": 10000115, "name": "达希莉亚", "element": "冰", "weapon": "单手剑", "stars": 4, "iconKey": "Dahlia"}, {"id": 10000039, "name": "迪奥娜", "element": "冰", "weapon": "弓", "stars": 4, "iconKey": "Diona"}, {"id": 10000036, "name": "重云", "element": "冰", "weapon": "双手剑", "stars": 4, "iconKey": "Chongyun"}, {"id": 10000020, "name": "雷泽", "element": "雷", "weapon": "双手剑", "stars": 4, "iconKey": "Razor"}, {"id": 10000023, "name": "香菱", "element": "火", "weapon": "长柄武器", "stars": 4, "iconKey": "Xiangling"}, {"id": 10000059, "name": "鹿野院平藏", "element": "风", "weapon": "法器", "stars": 4, "iconKey": "Heizo"}];
 
-    const cardContainer = document.getElementById('cardContainer');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalBody = document.getElementById('modalBody');
-    const modalClose = document.getElementById('modalClose');
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
+    const stars = {5: "⭐⭐⭐⭐⭐", 4: "⭐⭐⭐⭐"};
+    const elements_emoji = { "火":"🔥", "水":"💧", "草":"🌿", "雷":"⚡", "风":"🍃", "冰":"❄️", "岩":"⛰️" };
+
+    let filterState = { type: 'all', value: '' };
 
     // 渲染卡片
     function renderCards(data) {
+      const container = document.getElementById('cardContainer');
       if (!data.length) {
-        cardContainer.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#8b7355;">没有找到相关攻略，试试其他关键词~</p >`;
+        container.innerHTML = '<div class="empty-state">😔 没有找到符合条件的角色</div>';
+        updateStats(0);
         return;
       }
-      cardContainer.innerHTML = data.map(guide => `
-        <div class="card" data-id="${guide.id}">
-          <div class="card-img" style="background-image: url('${guide.image}');">
-            <span class="element-badge">${guide.element}</span>
+      container.innerHTML = data.map(c => `
+        <div class="card" data-id="${c.id}">
+          <div class="card-img" style="background-image: url('https://enka.network/ui/UI_Gacha_AvatarImg_${c.iconKey}.png')">
+            <span class="card-element">${elements_emoji[c.element]||''} ${c.element}</span>
+            <span class="card-stars" style="color:${c.stars===5?'#f3c74d':'#a885c4'}">${stars[c.stars]}</span>
           </div>
           <div class="card-content">
-            <h3>${guide.name}</h3>
-            <div class="role">${guide.role}</div>
-            <p>${guide.summary}</p >
-            <button class="btn-detail">查看详情</button>
+            <h3>${c.name}</h3>
+            <div class="role">${c.weapon}</div>
           </div>
         </div>
       `).join('');
     }
 
-    // 显示弹窗
-    function showModal(guideId) {
-      const guide = guides.find(g => g.id == guideId);
-      if (!guide) return;
-      modalBody.innerHTML = `
-        <h2>${guide.name}</h2>
-        <div class="element">${guide.element}元素 · ${guide.role}</div>
-        <div class="modal-section">
-          <h4>📋 简介</h4>
-          <p>${guide.summary}</p >
-        </div>
-        <div class="modal-section">
-          <h4>✨ 技能</h4>
-          <ul>${guide.skills.map(s => `<li>• ${s}</li>`).join('')}</ul>
-        </div>
-        <div class="modal-section">
-          <h4>🤝 推荐配队</h4>
-          <ul>${guide.team.map(t => `<li>✔️ ${t}</li>`).join('')}</ul>
-        </div>
-        <div class="modal-section">
-          <h4>💡 小贴士</h4>
-          <p>${guide.tips}</p >
-        </div>
-      `;
-      modalOverlay.classList.add('active');
+    function updateStats(count) {
+      document.getElementById('statsBar').textContent = count === undefined
+        ? `共 ${characters.length} 个角色`
+        : `找到 ${count} / ${characters.length} 个角色`;
     }
 
-    // 关闭弹窗
-    function closeModal() {
-      modalOverlay.classList.remove('active');
-    }
+    // 筛选逻辑
+    function applyFilters() {
+      let result = [...characters];
 
-    // 事件监听
-    cardContainer.addEventListener('click', (e) => {
-      const card = e.target.closest('.card');
-      if (!card) return;
-      const id = card.dataset.id;
-      showModal(id);
-    });
-
-    modalClose.addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) closeModal();
-    });
-
-    // 搜索功能
-    function filterGuides() {
-      const keyword = searchInput.value.trim().toLowerCase();
-      if (!keyword) {
-        renderCards(guides);
-        return;
+      // 搜索
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (query) {
+        result = result.filter(c => c.name.includes(query));
       }
-      const filtered = guides.filter(g =>
-        g.name.toLowerCase().includes(keyword) ||
-        g.element.toLowerCase().includes(keyword) ||
-        g.role.toLowerCase().includes(keyword) ||
-        g.summary.toLowerCase().includes(keyword)
-      );
-      renderCards(filtered);
+
+      // 过滤按钮
+      if (filterState.type !== 'all') {
+        result = result.filter(c => c[filterState.type] == filterState.value);
+      }
+
+      renderCards(result);
+      updateStats(result.length);
     }
 
-    searchBtn.addEventListener('click', filterGuides);
-    searchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') filterGuides();
-    });
+    // 事件绑定
+    document.addEventListener('DOMContentLoaded', () => {
+      updateStats();
+      renderCards(characters);
 
-    // 初始渲染
-    renderCards(guides);
+      const overlay = document.getElementById('modalOverlay');
+      const closeBtn = document.getElementById('modalClose');
+      const container = document.getElementById('cardContainer');
+      const searchInput = document.getElementById('searchInput');
+      const searchBtn = document.getElementById('searchBtn');
+
+      // 点卡片 -> 弹窗
+      container.addEventListener('click', (e) => {
+        const card = e.target.closest('.card');
+        if (!card) return;
+        const id = parseInt(card.dataset.id);
+        const c = characters.find(ch => ch.id === id);
+        if (!c) return;
+
+        document.getElementById('modalBody').innerHTML = `
+          <h2>${c.name}</h2>
+          <div class="modal-sub">${elements_emoji[c.element]||''} ${c.element}元素 · ${c.weapon}</div>
+          <div class="modal-section">
+            <h4>📋 基本信息</h4>
+            <div class="modal-info-grid">
+              <span class="modal-info-item"><strong>星级：</strong>${stars[c.stars]}</span>
+              <span class="modal-info-item"><strong>武器：</strong>${c.weapon}</span>
+              <span class="modal-info-item"><strong>元素：</strong>${c.element}</span>
+            </div>
+          </div>
+          <div class="modal-section">
+            <h4>🖼️ 角色立绘</h4>
+            <div style="display:flex;gap:0.5rem;">
+              <img src="https://enka.network/ui/UI_AvatarIcon_${c.iconKey}.png" style="width:80px;height:80px;border-radius:12px;background:#f3ede5;" alt="${c.name}头像">
+              <img src="https://enka.network/ui/UI_Gacha_AvatarImg_${c.iconKey}.png" style="width:200px;height:80px;object-fit:cover;border-radius:12px;background:#f3ede5;" alt="${c.name}立绘" onerror="this.style.display='none'">
+            </div>
+          </div>
+        `;
+        overlay.classList.add('active');
+      });
+
+      closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.classList.remove('active');
+      });
+
+      // 筛选按钮
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.dataset.filter;
+          const value = btn.dataset.value;
+          
+          if (filter === 'all') {
+            filterState = { type: 'all', value: '' };
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          } else {
+            filterState = { type: filter, value: value };
+            document.querySelectorAll('.filter-btn').forEach(b => {
+              if (b.dataset.filter === filter && b.dataset.value === value) {
+                b.classList.add('active');
+              } else if (b.dataset.filter !== 'all') {
+                b.classList.remove('active');
+              }
+            });
+          }
+          btn.classList.add('active');
+          applyFilters();
+        });
+      });
+
+      // 搜索
+      searchBtn.addEventListener('click', applyFilters);
+      searchInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') applyFilters();
+      });
+    });
   </script>
 </body>
 </html>
