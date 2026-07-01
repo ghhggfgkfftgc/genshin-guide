@@ -616,7 +616,15 @@ function renderBox() {
         if(idx>=0) box.splice(idx,1);
       }
       saveBox(box);
-      renderBox();
+      // 更新计数
+      document.getElementById('boxCount').textContent = '已选 '+box.length+' / '+_C.length+' 个角色';
+      // 更新推荐（不重绘网格）
+      if(box.length>=2){
+        document.getElementById('boxRecommend').style.display='block';
+        document.getElementById('boxRecContent').innerHTML = generateRecommendations(box);
+      } else {
+        document.getElementById('boxRecommend').style.display='none';
+      }
     });
   });
 
